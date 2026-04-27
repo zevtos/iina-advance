@@ -198,27 +198,27 @@ step_libplacebo() {
   git clone --recursive "$LIBPLACEBO_REPO" "$SRC_DIR/libplacebo"
   ( cd "$SRC_DIR/libplacebo" && git checkout "$LIBPLACEBO_SHA" && git submodule update --init --recursive )
 
-  local extra_args=()
   if $USE_LIBPLACEBO_METAL; then
-    # Native Metal backend (experimental; verified per build).
-    extra_args+=( -Dmetal=enabled -Dvulkan=disabled )
-  else
-    # Default: Vulkan via MoltenVK shim.
-    extra_args+=( -Dvulkan=enabled -Dmetal=disabled -Dvk-proc-addr=enabled )
+    warn "libplacebo $LIBPLACEBO_SHA has no native Metal backend option."
+    warn "--use-libplacebo-metal is ignored; using MoltenVK Vulkan path."
   fi
 
   meson setup "$SRC_DIR/libplacebo/build" "$SRC_DIR/libplacebo" \
     --prefix="$INSTALL_DIR" \
     --buildtype=release \
     --default-library=static \
+    -Dvulkan=enabled \
+    -Dvk-proc-addr=enabled \
+    -Dopengl=enabled \
+    -Dgl-proc-addr=enabled \
     -Dshaderc=enabled \
-    -Dglslang=enabled \
+    -Dglslang=disabled \
     -Dlcms=enabled \
+    -Ddovi=enabled \
     -Dlibdovi=enabled \
-    -Dxxhash=enabled \
+    -Dxxhash=disabled \
     -Ddemos=false \
     -Dtests=false \
-    "${extra_args[@]}" \
     --pkg-config-path "$INSTALL_DIR/lib/pkgconfig:$(brew --prefix)/lib/pkgconfig"
 
   meson compile -C "$SRC_DIR/libplacebo/build" -j "$JOBS"
@@ -286,10 +286,9 @@ step_mpv_build() {
       -Dlibmpv=true \
       -Dcplayer=false \
       -Dgpl=true \
-      -Dlibplacebo=enabled \
       -Dlua=disabled \
       -Djavascript=disabled \
-      -Dswift-build=disabled \
+      -Dswift-build=enabled \
       -Dmacos-cocoa-cb=disabled \
       -Dvideotoolbox-gl=enabled \
       -Dvideotoolbox-pl=enabled \
@@ -316,21 +315,14 @@ step_install_to_deps() {
 
   log "Real libmpv: $libmpv"
 
-  # change_lib_dependencies.rb wants a "prefix" — the path under which it walks
-  # transitive dependencies. We use INSTALL_DIR as our prefix; deps coming from
-  # Homebrew (ffmpeg, lcms2, etc.) will be picked up from `brew --prefix` and
-  # bundled too.
-  ruby "$CHANGE_LIB" "$INSTALL_DIR" "$libmpv"
-
-  # change_lib_dependencies.rb also walks Homebrew prefix; do a second pass to
-  # catch deps under brew --prefix.
+  # change_lib_dependencies.rb wipes deps/lib at start and walks transitive
+  # deps under the given prefix, copying them into deps/lib and rewriting
+  # install names to @rpath/. libplacebo + libdovi are statically linked into
+  # libmpv (no separate dylib to bundle); the only dynamic deps are Homebrew
+  # libraries (ffmpeg/libass/lcms/etc), so we walk under brew --prefix.
   local brew_prefix
   brew_prefix="$(brew --prefix)"
-  local libmpv_in_deps
-  libmpv_in_deps="$DEPS_LIB/$(basename "$libmpv")"
-  if [[ -f "$libmpv_in_deps" ]]; then
-    ruby "$CHANGE_LIB" "$brew_prefix" "$libmpv_in_deps"
-  fi
+  ruby "$CHANGE_LIB" "$brew_prefix" "$libmpv"
 
   ok "libmpv installed to $DEPS_LIB"
 }
