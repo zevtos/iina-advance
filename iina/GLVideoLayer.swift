@@ -320,6 +320,14 @@ class GLVideoLayer: CAOpenGLLayer {
     }
     let apiType = UnsafeMutableRawPointer(mutating: (MPV_RENDER_API_TYPE_OPENGL as NSString).utf8String)
 
+    /// Opt-in: ask mpv to use the libplacebo-based "gpu-next" render backend
+    /// (PR #16818). Requires a custom libmpv with that PR cherry-picked; stock
+    /// libmpv ignores the unknown param and uses the default backend.
+    let useGpuNext = Preference.bool(for: .useGpuNextBackend)
+    let backendName: UnsafeMutableRawPointer? = useGpuNext
+      ? UnsafeMutableRawPointer(mutating: ("gpu-next" as NSString).utf8String)
+      : nil
+
     func mpvGetOpenGLFunc(_ ctx: UnsafeMutableRawPointer?, _ name: UnsafePointer<Int8>?) -> UnsafeMutableRawPointer? {
       let symbolName: CFString = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingASCII);
       guard let addr = CFBundleGetFunctionPointerForName(CFBundleGetBundleWithIdentifier(CFStringCreateCopy(kCFAllocatorDefault, "com.apple.opengl" as CFString)), symbolName) else {
@@ -338,12 +346,16 @@ class GLVideoLayer: CAOpenGLLayer {
     withUnsafeMutablePointer(to: &openGLInitParams) { openGLInitParams in
       var advanced: CInt = 1
       withUnsafeMutablePointer(to: &advanced) { advanced in
-        var params = [
+        var params: [mpv_render_param] = [
           mpv_render_param(type: MPV_RENDER_PARAM_API_TYPE, data: apiType),
           mpv_render_param(type: MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, data: openGLInitParams),
           mpv_render_param(type: MPV_RENDER_PARAM_ADVANCED_CONTROL, data: advanced),
-          mpv_render_param()
         ]
+        if let backendName {
+          params.append(mpv_render_param(type: MPV_RENDER_PARAM_BACKEND, data: backendName))
+          player.log.debug("Using mpv render backend: gpu-next")
+        }
+        params.append(mpv_render_param())
         mpv.chkErr(mpv_render_context_create(&mpvRenderContext, mpv.mpv, &params))
       }
       openGLContext = CGLGetCurrentContext()

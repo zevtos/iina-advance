@@ -347,6 +347,12 @@ struct Preference {
     static let enableToneMapping = Key("enableToneMapping")
     static let toneMappingTargetPeak = Key("toneMappingTargetPeak")
     static let toneMappingAlgorithm = Key("toneMappingAlgorithm")
+    /// Opt into mpv's libplacebo-based render backend ("gpu-next") for the libmpv
+    /// render API. Requires a custom libmpv built with PR #16818 cherry-picked
+    /// (see other/build_mpv.sh). Unlocks DV reshape, HDR10+ ST.2094-40 dynamic
+    /// tone-mapping, and improved color management. Falls back transparently to
+    /// the default "gpu" backend if the bundled libmpv lacks the new param.
+    static let useGpuNextBackend = Key("useGpuNextBackend")
 
     static let audioDriverEnableAVFoundation = Key("audioDriverEnableAVFoundation")
     static let audioThreads = Key("audioThreads")
@@ -1787,6 +1793,7 @@ struct Preference {
     .enableToneMapping: false,
     .toneMappingTargetPeak: 0,
     .toneMappingAlgorithm: ToneMappingAlgorithmOption.defaultValue.rawValue,
+    .useGpuNextBackend: false,
     .audioDriverEnableAVFoundation: false,
     .audioThreads: 0,
     .audioLanguage: "",
