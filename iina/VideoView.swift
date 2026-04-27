@@ -291,6 +291,9 @@ class VideoView: NSView {
       player.mpv.setString(MPVOption.GPURendererOptions.targetPrim, "auto")
       player.mpv.setString(MPVOption.GPURendererOptions.targetPeak, "auto")
       player.mpv.setString(MPVOption.GPURendererOptions.toneMapping, "auto")
+      // Restore default subtitle compositing for SDR; the HDR path sets
+      // `blend-subtitles=video` to keep libass output at paper-white luminance.
+      player.mpv.setString(MPVOption.GPURendererOptions.blendSubtitles, "no")
       // Check first to avoid spurious error in mpv 0.40.0 log complaining about the value being out of range
       if player.mpv.getString(MPVOption.GPURendererOptions.toneMappingParam) != "default" {
         player.mpv.setString(MPVOption.GPURendererOptions.toneMappingParam, "default")

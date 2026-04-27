@@ -116,6 +116,11 @@ extension VideoView {
         mpv.setString(MPVOption.GPURendererOptions.targetTrc, "pq")
         mpv.setFlag(MPVOption.Screenshot.screenshotTagColorspace, true)
 
+        // Composite subtitles into the video frame *before* tone-mapping, so
+        // libass output is treated as SDR content (paper-white ~203 nits) and
+        // doesn't bloom to display peak luminance on EDR.
+        mpv.setString(MPVOption.GPURendererOptions.blendSubtitles, "video")
+
         if Preference.bool(for: .enableToneMapping) {
           var targetPeak = Preference.integer(for: .toneMappingTargetPeak)
           // If the target peak is set to zero then IINA attempts to determine peak brightness of the
