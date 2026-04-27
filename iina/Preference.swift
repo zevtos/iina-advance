@@ -353,6 +353,9 @@ struct Preference {
     /// tone-mapping, and improved color management. Falls back transparently to
     /// the default "gpu" backend if the bundled libmpv lacks the new param.
     static let useGpuNextBackend = Key("useGpuNextBackend")
+    /// Battery / thermal saver behavior. Maps to `PerfManager.UserMode`:
+    /// 0 = auto (follow battery+thermal), 1 = alwaysFull, 2 = alwaysSaver.
+    static let batteryMode = Key("batteryMode")
 
     static let audioDriverEnableAVFoundation = Key("audioDriverEnableAVFoundation")
     static let audioThreads = Key("audioThreads")
@@ -1794,6 +1797,7 @@ struct Preference {
     .toneMappingTargetPeak: 0,
     .toneMappingAlgorithm: ToneMappingAlgorithmOption.defaultValue.rawValue,
     .useGpuNextBackend: false,
+    .batteryMode: 0,
     .audioDriverEnableAVFoundation: false,
     .audioThreads: 0,
     .audioLanguage: "",

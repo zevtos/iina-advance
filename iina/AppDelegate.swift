@@ -325,7 +325,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     if isInteractiveLaunch {
       ScreenshotStorageManager.shared.setup()
     }
-    
+
+    // Begin observing battery + thermal state so PerfManager can ask players
+    // to throttle GPU work when the laptop is unplugged or running hot.
+    PerfManager.shared.startObserving()
+
     startupHandler.doStartup()
   }
 
