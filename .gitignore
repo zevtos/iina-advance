@@ -116,3 +116,9 @@ deps/lib*
 
 # Nix
 result
+
+# Working notes (not part of repo history)
+docs/
+
+# Custom mpv build tree (see other/build_mpv.sh)
+_build/
