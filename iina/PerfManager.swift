@@ -164,21 +164,29 @@ final class PerfManager {
   /// `useGpuNextBackend`-style overrides remain untouched; this only adjusts
   /// transient run-time settings that we can safely revert by re-applying
   /// `.full` later.
+  ///
+  /// `PlayerManager.shared.playerCores` is `@MainActor`-isolated. We hop onto
+  /// the main actor via `Task { @MainActor in }` so this works regardless of
+  /// the caller's actor context (the IOPS run-loop callback is a C function
+  /// pointer that cannot be marked `@MainActor`). One event-loop tick is
+  /// imperceptible for a battery / thermal transition.
   private func apply(_ profile: Profile) {
-    for player in PlayerManager.shared.playerCores where player.isActive {
-      player.mpv.queue.async { [weak player] in
-        guard let player = player else { return }
+    Task { @MainActor in
+      for player in PlayerManager.shared.playerCores where player.isActive {
+        player.mpv.queue.async { [weak player] in
+          guard let player = player else { return }
 
-        if profile.shouldClearShaders {
-          // Clearing the chain is the most impactful single throttle on
-          // M-series laptops: ArtCNN / KrigBilateral / SSim* are double-digit
-          // ms/frame at 4K. Re-enabling on .full transitions is left to a
-          // follow-up commit that needs a save/restore mechanism for the
-          // user-configured chain.
-          player.mpv.setString(MPVOption.GPURendererOptions.glslShaders, "")
+          if profile.shouldClearShaders {
+            // Clearing the chain is the most impactful single throttle on
+            // M-series laptops: ArtCNN / KrigBilateral / SSim* are double-
+            // digit ms/frame at 4K. Re-enabling on .full transitions needs
+            // a save/restore mechanism for the user-configured chain and
+            // is tracked in LIMITATIONS.md.
+            player.mpv.setString(MPVOption.GPURendererOptions.glslShaders, "")
+          }
+          // RIFE-style vapoursynth filters and tone-mapping adjustments are
+          // tracked in LIMITATIONS.md until ShaderManager / VFManager land.
         }
-        // RIFE-style vapoursynth filters and tone-mapping adjustments are
-        // tracked in LIMITATIONS.md until ShaderManager / VFManager land.
       }
     }
   }

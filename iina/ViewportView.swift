@@ -22,12 +22,6 @@ final class ViewportView: NSView {
     idString = "ViewportView"
     registerForDraggedTypes([.nsFilenames, .nsURL, .string])
     wantsLayer = true  // needed for background color
-    /// Tag overlay UI as extended sRGB so macOS' compositor maps it to SDR
-    /// paper-white reference (~203 nits) when the contained `videoView` layer
-    /// turns on `wantsExtendedDynamicRangeContent` for HDR. Without this, the
-    /// OS falls back to device RGB heuristics and the OSC / OSD can render at
-    /// full display peak luminance over EDR video.
-    layer?.colorspace = CGColorSpace(name: CGColorSpace.extendedSRGB)
     clipsToBounds = true
     translatesAutoresizingMaskIntoConstraints = false
     autoresizesSubviews = false

@@ -27,9 +27,6 @@ Last updated: 2026-04-27 (Phase 1c/1d landing).
   is applied whenever the EDR path is taken, so libass output is composited
   into the video frame before tone-mapping and lands at SDR ref white
   (~203 nits) instead of full display peak (~1500 nits on XDR).
-- **AppKit overlay colorspace.** `ViewportView`'s layer is tagged
-  `extendedSRGB` so macOS WindowServer composites OSC / OSD / sidebars as
-  SDR over EDR video without overlay UI looking washed out or glowing.
 - **Battery / thermal saver mode.** `PerfManager` observes
   `IOPSGetProvidingPowerSourceType` and `NSProcessInfo.thermalState`,
   classifies into `full / batterySaver / thermalWarn / emergency`, and
@@ -77,6 +74,20 @@ descoping them in favor of the release blockers (subs / OSD / battery).
   to own the user's chain and re-apply it on profile change.
 - Workaround today: toggle the pref or restart playback to re-load
   shaders from `mpv.conf`.
+
+### AppKit overlay colorspace tagging on EDR
+- The first attempt set `viewportView.layer.colorspace = extendedSRGB`,
+  but `CALayer` itself has no `colorspace` property — only specific
+  subclasses (`CAMetalLayer`, `CAOpenGLLayer`) do. The change was
+  reverted.
+- The correct mechanism is one of:
+  1. `NSWindow.colorSpace = NSColorSpace.extendedSRGB` (window-wide tag),
+  2. host the OSC / OSD inside a layer-backed view that uses a
+     `CAMetalLayer` so its `colorspace` can be set explicitly,
+  3. rely on the OS' default behavior (modern macOS WindowServer is
+     reasonably good at this without explicit tagging).
+- Today the OSC may render brighter than expected over peak-bright HDR
+  scenes. Visible mainly on full-peak XDR display content.
 
 ### RIFE / heavy vapoursynth filter throttling
 - `PerfManager` only handles `glsl-shaders` today. RIFE-style frame

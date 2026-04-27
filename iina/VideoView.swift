@@ -54,7 +54,9 @@ class VideoView: NSView {
   // cached indicator to prevent unnecessary updates of DisplayLink
   var currentDisplay: UInt32?
 
-  private let logHDR: any Logger.Subsystem
+  /// Internal access (not `private`) so the `VideoView_HDR.swift` extension —
+  /// which lives in a sibling file — can use it.
+  let logHDR: any Logger.Subsystem
 
   static let SRGB = CGColorSpaceCreateDeviceRGB()
 
