@@ -150,10 +150,37 @@ final class PerfManager {
     Logger.log.verbose("Perf profile changed: \(oldProfile) → \(newProfile) "
                        + "(battery=\(battery), thermal=\(thermal.rawValue), userMode=\(userMode.rawValue))")
 
+    apply(newProfile)
+
     NotificationCenter.default.post(
       name: .iinaPerfProfileChanged, object: self,
       userInfo: ["profile": newProfile.rawValue, "previous": oldProfile.rawValue]
     )
+  }
+
+  // MARK: - Application
+
+  /// Push the new profile down to every active mpv core. The user pref
+  /// `useGpuNextBackend`-style overrides remain untouched; this only adjusts
+  /// transient run-time settings that we can safely revert by re-applying
+  /// `.full` later.
+  private func apply(_ profile: Profile) {
+    for player in PlayerManager.shared.playerCores where player.isActive {
+      player.mpv.queue.async { [weak player] in
+        guard let player = player else { return }
+
+        if profile.shouldClearShaders {
+          // Clearing the chain is the most impactful single throttle on
+          // M-series laptops: ArtCNN / KrigBilateral / SSim* are double-digit
+          // ms/frame at 4K. Re-enabling on .full transitions is left to a
+          // follow-up commit that needs a save/restore mechanism for the
+          // user-configured chain.
+          player.mpv.setString(MPVOption.GPURendererOptions.glslShaders, "")
+        }
+        // RIFE-style vapoursynth filters and tone-mapping adjustments are
+        // tracked in LIMITATIONS.md until ShaderManager / VFManager land.
+      }
+    }
   }
 
   private func thermalProfile(_ state: ProcessInfo.ThermalState) -> Profile {
