@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1326717E20852D0D000FA7E2 /* SubChooseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1326718020852D0D000FA7E2 /* SubChooseViewController.xib */; };
+		25AECAFD35F7115F2DC8234C /* VideoView_HDR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126006A8F0744AB99E5F16DC /* VideoView_HDR.swift */; };
 		3412DB8E2C2FC64C00BBC142 /* Equalizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3412DB8D2C2FC64800BBC142 /* Equalizations.swift */; };
 		348F71962DE2A819006C587D /* MPVCommandWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348F71952DE2A814006C587D /* MPVCommandWrappers.swift */; };
 		34ACAB722C142A0500F871A0 /* libintl.8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 34ACAB2D2C142A0300F871A0 /* libintl.8.dylib */; };
@@ -748,6 +749,7 @@
 		0507C27D2B5624AE0043AD05 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0507C27E2B563C1D0043AD05 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/FilterPresets.strings; sourceTree = "<group>"; };
 		05B91AB22BFEE5E70012631C /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/KeyBinding.strings; sourceTree = "<group>"; };
+		126006A8F0744AB99E5F16DC /* VideoView_HDR.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VideoView_HDR.swift; sourceTree = "<group>"; };
 		1326717F20852D0D000FA7E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SubChooseViewController.xib; sourceTree = "<group>"; };
 		133400111EB3831C007FE17E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		133400131EB3831D007FE17E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/QuickSettingViewController.strings; sourceTree = "<group>"; };
@@ -2944,6 +2946,7 @@
 				84A0BAA61D2FAF8400BC8DA1 /* Utils */,
 				518DB7002FA6A1480024F0B0 /* Scripts */,
 				D16B51092F5AA928000D9767 /* RAMDisk_README.md */,
+				126006A8F0744AB99E5F16DC /* VideoView_HDR.swift */,
 			);
 			indentWidth = 2;
 			path = iina;
@@ -3329,8 +3332,6 @@
 			dependencies = (
 			);
 			name = "iina-cli";
-			packageProductDependencies = (
-			);
 			productName = "iina-cli";
 			productReference = E3DE8DCA1FD8166A0021921C /* iina-cli */;
 			productType = "com.apple.product-type.tool";
@@ -3404,7 +3405,7 @@
 			mainGroup = 84EB1ECD1D2F51D3004FA5A1;
 			packageReferences = (
 				B4E446E625CB53920069F06E /* XCRemoteSwiftPackageReference "PromiseKit" */,
-				B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache" */,
+				B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache.swift" */,
 				B4E446FF25CE3F930069F06E /* XCRemoteSwiftPackageReference "Sparkle" */,
 				8451E6D72604AEFC009A15D7 /* XCRemoteSwiftPackageReference "Just" */,
 				D13912622F29547200540624 /* XCRemoteSwiftPackageReference "swift-collections" */,
@@ -3883,6 +3884,7 @@
 				84BEEC3F1DFEDE2F00F945CA /* PrefKeyBindingViewController.swift in Sources */,
 				D1D579542B16C38F009E3520 /* ClickThroughView.swift in Sources */,
 				D1A071892D644F4600884828 /* ResizableTextView.swift in Sources */,
+				25AECAFD35F7115F2DC8234C /* VideoView_HDR.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5822,7 +5824,7 @@
 				minimumVersion = 6.22.1;
 			};
 		};
-		B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache" */ = {
+		B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRMustache.swift";
 			requirement = {
@@ -5869,7 +5871,7 @@
 		};
 		B4E446F625CB54EF0069F06E /* Mustache */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache" */;
+			package = B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache.swift" */;
 			productName = Mustache;
 		};
 		B4E4470025CE3F930069F06E /* Sparkle */ = {
@@ -5889,7 +5891,7 @@
 		};
 		E38558902A486E060083772D /* Mustache */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache" */;
+			package = B4E446F525CB54EF0069F06E /* XCRemoteSwiftPackageReference "GRMustache.swift" */;
 			productName = Mustache;
 		};
 /* End XCSwiftPackageProductDependency section */
