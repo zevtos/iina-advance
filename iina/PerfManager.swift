@@ -18,6 +18,7 @@ extension Notification.Name {
   static let iinaPerfProfileChanged = Notification.Name("iinaPerfProfileChanged")
 }
 
+@MainActor
 final class PerfManager {
 
   /// Output profile. Higher cases imply more aggressive throttling.
@@ -75,11 +76,14 @@ final class PerfManager {
     hasStarted = true
 
     // Power source. IOPSNotificationCreateRunLoopSource fires on every change
-    // (battery <-> AC, % drained, etc); we re-evaluate on each tick.
+    // (battery <-> AC, % drained, etc); we re-evaluate on each tick. The
+    // callback is a C function pointer so it cannot be `@MainActor`-annotated
+    // directly — we hop via a Task that targets MainActor.
     let context = Unmanaged.passUnretained(self).toOpaque()
     let src = IOPSNotificationCreateRunLoopSource({ ctx in
       guard let ctx = ctx else { return }
-      Unmanaged<PerfManager>.fromOpaque(ctx).takeUnretainedValue().reevaluate()
+      let manager = Unmanaged<PerfManager>.fromOpaque(ctx).takeUnretainedValue()
+      Task { @MainActor in manager.reevaluate() }
     }, context).takeRetainedValue()
     CFRunLoopAddSource(CFRunLoopGetMain(), src, .defaultMode)
     powerSourceRunLoopSource = src
@@ -88,12 +92,16 @@ final class PerfManager {
     thermalObserver = NotificationCenter.default.addObserver(
       forName: ProcessInfo.thermalStateDidChangeNotification,
       object: nil, queue: .main
-    ) { [weak self] _ in self?.reevaluate() }
+    ) { [weak self] _ in
+      Task { @MainActor in self?.reevaluate() }
+    }
 
     // User pref override.
     prefObserver = NotificationCenter.default.addObserver(
       forName: UserDefaults.didChangeNotification, object: nil, queue: .main
-    ) { [weak self] _ in self?.reevaluate() }
+    ) { [weak self] _ in
+      Task { @MainActor in self?.reevaluate() }
+    }
 
     reevaluate()
   }
@@ -117,7 +125,8 @@ final class PerfManager {
   // MARK: - State
 
   /// `true` when the system reports running on battery, false on AC or unknown.
-  static var isOnBattery: Bool {
+  /// `nonisolated` because it only touches IOKit C APIs and has no shared state.
+  nonisolated static var isOnBattery: Bool {
     guard let info = IOPSCopyPowerSourcesInfo()?.takeRetainedValue() else { return false }
     let providing = IOPSGetProvidingPowerSourceType(info)?.takeUnretainedValue()
     return (providing as String?) == kIOPSBatteryPowerValue
@@ -164,29 +173,21 @@ final class PerfManager {
   /// `useGpuNextBackend`-style overrides remain untouched; this only adjusts
   /// transient run-time settings that we can safely revert by re-applying
   /// `.full` later.
-  ///
-  /// `PlayerManager.shared.playerCores` is `@MainActor`-isolated. We hop onto
-  /// the main actor via `Task { @MainActor in }` so this works regardless of
-  /// the caller's actor context (the IOPS run-loop callback is a C function
-  /// pointer that cannot be marked `@MainActor`). One event-loop tick is
-  /// imperceptible for a battery / thermal transition.
   private func apply(_ profile: Profile) {
-    Task { @MainActor in
-      for player in PlayerManager.shared.playerCores where player.isActive {
-        player.mpv.queue.async { [weak player] in
-          guard let player = player else { return }
+    for player in PlayerManager.shared.playerCores where player.isActive {
+      player.mpv.queue.async { [weak player] in
+        guard let player = player else { return }
 
-          if profile.shouldClearShaders {
-            // Clearing the chain is the most impactful single throttle on
-            // M-series laptops: ArtCNN / KrigBilateral / SSim* are double-
-            // digit ms/frame at 4K. Re-enabling on .full transitions needs
-            // a save/restore mechanism for the user-configured chain and
-            // is tracked in LIMITATIONS.md.
-            player.mpv.setString(MPVOption.GPURendererOptions.glslShaders, "")
-          }
-          // RIFE-style vapoursynth filters and tone-mapping adjustments are
-          // tracked in LIMITATIONS.md until ShaderManager / VFManager land.
+        if profile.shouldClearShaders {
+          // Clearing the chain is the most impactful single throttle on
+          // M-series laptops: ArtCNN / KrigBilateral / SSim* are double-digit
+          // ms/frame at 4K. Re-enabling on .full transitions needs a
+          // save/restore mechanism for the user-configured chain and is
+          // tracked in LIMITATIONS.md.
+          player.mpv.setString(MPVOption.GPURendererOptions.glslShaders, "")
         }
+        // RIFE-style vapoursynth filters and tone-mapping adjustments are
+        // tracked in LIMITATIONS.md until ShaderManager / VFManager land.
       }
     }
   }

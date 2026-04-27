@@ -328,7 +328,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
 
     // Begin observing battery + thermal state so PerfManager can ask players
     // to throttle GPU work when the laptop is unplugged or running hot.
-    PerfManager.shared.startObserving()
+    // PerfManager is @MainActor; this delegate method isn't statically marked
+    // such, so hop explicitly. AppKit always invokes us on the main thread,
+    // so the Task starts immediately.
+    Task { @MainActor in PerfManager.shared.startObserving() }
 
     startupHandler.doStartup()
   }
