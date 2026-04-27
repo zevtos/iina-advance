@@ -5011,6 +5011,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988E2919E47900CD61A5 /* OpenInIINA.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5018,7 +5019,9 @@
 					"DEBUG=1",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance.OpenInIINA";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -5026,12 +5029,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988E2919E47900CD61A5 /* OpenInIINA.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance.OpenInIINA";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -5039,6 +5045,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 51537C7229FA26DD00F9A472 /* Nightly.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CURRENT_PROJECT_VERSION = 16;
@@ -5046,6 +5053,7 @@
 				DEVELOPMENT_TEAM = PG2MG2559L;
 				GCC_PREPROCESSOR_DEFINITIONS = "GL_SILENCE_DEPRECATION=1";
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -5057,6 +5065,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 496498882919E47900CD61A5 /* iina.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
@@ -5073,9 +5082,11 @@
 					"$(PROJECT_DIR)/deps/lib",
 				);
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance";
 				SKIP_INSTALL = NO;
 				SWIFT_STRICT_CONCURRENCY = minimal;
+				VALID_ARCHS = arm64;
 			};
 			name = Nightly;
 		};
@@ -5083,8 +5094,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988B2919E47900CD61A5 /* iina-cli.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 69Q229R3R6;
+				ONLY_ACTIVE_ARCH = YES;
+				VALID_ARCHS = arm64;
 			};
 			name = Nightly;
 		};
@@ -5092,10 +5106,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988E2919E47900CD61A5 /* OpenInIINA.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				DEAD_CODE_STRIPPING = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance.OpenInIINA";
+				VALID_ARCHS = arm64;
 			};
 			name = Nightly;
 		};
@@ -5103,6 +5120,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 51A0F0F629FA2C8E000130CF /* Beta.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CURRENT_PROJECT_VERSION = 16;
@@ -5111,6 +5129,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "GL_SILENCE_DEPRECATION=1";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -5122,6 +5141,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 496498882919E47900CD61A5 /* iina.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
@@ -5138,9 +5158,11 @@
 					"$(PROJECT_DIR)/deps/lib",
 				);
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance";
 				SKIP_INSTALL = NO;
 				SWIFT_STRICT_CONCURRENCY = minimal;
+				VALID_ARCHS = arm64;
 			};
 			name = Beta;
 		};
@@ -5148,8 +5170,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988B2919E47900CD61A5 /* iina-cli.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 69Q229R3R6;
+				ONLY_ACTIVE_ARCH = YES;
+				VALID_ARCHS = arm64;
 			};
 			name = Beta;
 		};
@@ -5157,9 +5182,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988E2919E47900CD61A5 /* OpenInIINA.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				DEAD_CODE_STRIPPING = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance.OpenInIINA";
+				VALID_ARCHS = arm64;
 			};
 			name = Beta;
 		};
@@ -5167,6 +5195,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988C2919E47900CD61A5 /* Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CURRENT_PROJECT_VERSION = 16;
@@ -5175,6 +5204,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "GL_SILENCE_DEPRECATION=1";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -5186,6 +5216,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988D2919E47900CD61A5 /* Release.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -5195,6 +5226,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "GL_SILENCE_DEPRECATION=1";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -5206,6 +5238,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 496498882919E47900CD61A5 /* iina.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
@@ -5225,9 +5258,11 @@
 					"$(PROJECT_DIR)/deps/lib",
 				);
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance";
 				SKIP_INSTALL = NO;
 				SWIFT_STRICT_CONCURRENCY = minimal;
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -5235,6 +5270,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 496498882919E47900CD61A5 /* iina.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				CODE_SIGN_ENTITLEMENTS = iina/iinaRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -5257,11 +5293,13 @@
 					"$(PROJECT_DIR)/deps/lib",
 				);
 				MARKETING_VERSION = 1.5.4;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CODE_SIGN_FLAGS = "--deep --timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iina-advance";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				SWIFT_STRICT_CONCURRENCY = minimal;
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -5270,6 +5308,7 @@
 			baseConfigurationReference = 515B5E592A579782001FCD49 /* iina-plugin.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5327,6 +5366,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -5335,6 +5375,7 @@
 			baseConfigurationReference = 515B5E592A579782001FCD49 /* iina-plugin.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5384,12 +5425,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -5398,6 +5441,7 @@
 			baseConfigurationReference = 515B5E592A579782001FCD49 /* iina-plugin.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5443,11 +5487,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				VALID_ARCHS = arm64;
 			};
 			name = Beta;
 		};
@@ -5456,6 +5502,7 @@
 			baseConfigurationReference = 515B5E592A579782001FCD49 /* iina-plugin.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5501,11 +5548,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				VALID_ARCHS = arm64;
 			};
 			name = Nightly;
 		};
@@ -5513,8 +5562,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988B2919E47900CD61A5 /* iina-cli.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 69Q229R3R6;
+				ONLY_ACTIVE_ARCH = YES;
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -5522,6 +5574,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4964988B2919E47900CD61A5 /* iina-cli.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
@@ -5529,7 +5582,9 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = PG2MG2559L;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = 69Q229R3R6;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
