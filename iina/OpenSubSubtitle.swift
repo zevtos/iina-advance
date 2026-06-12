@@ -147,7 +147,14 @@ class OpenSub {
         }.then {
           self.hash(url)
         }.then { hash in
-          self.searchForSubtitles(url, hash, player.getMediaTitle())
+          // getMediaTitle must run on the mpv queue
+          Promise<String> { resolver in
+            player.mpv.queue.async {
+              resolver.fulfill(player.getMediaTitle())
+            }
+          }.then { mediaTitle in
+            self.searchForSubtitles(url, hash, mediaTitle)
+          }
         }.then { subs in
           self.showSubSelectWindow(with: subs)
         }
