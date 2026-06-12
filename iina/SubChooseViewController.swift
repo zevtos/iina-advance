@@ -33,7 +33,17 @@ class SubChooseViewController: NSViewController {
       } else {
         scrollView.layer?.cornerRadius = 6
       }
+
+      // The scroll view has no intrinsic height. Its only height source in the XIB is a
+      // priority-99 (>= 200) constraint on the root view, which loses to the OSD stack view's
+      // vertical hugging (500), collapsing the table to zero height. Pin a minimum height with
+      // a priority high enough to win against the stack view, but below the window's required
+      // layout constraints.
+      let minHeightConstraint = scrollView.heightAnchor.constraint(greaterThanOrEqualToConstant: 156)
+      minHeightConstraint.priority = .init(600)
+      minHeightConstraint.isActive = true
     }
+    view.setContentCompressionResistancePriority(.init(600), for: .vertical)
 
     tableView.delegate = self
     tableView.dataSource = self
