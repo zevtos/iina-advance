@@ -9,10 +9,15 @@
 /* Begin PBXBuildFile section */
 		06853D8182FD4145F57FD672 /* libbluray.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BF4291725B5E7BB09ECCB1 /* libbluray.3.dylib */; };
 		1326717E20852D0D000FA7E2 /* SubChooseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1326718020852D0D000FA7E2 /* SubChooseViewController.xib */; };
+		13C48EFFAA07A6E9C28B0E68 /* libavcodec.62.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 28D1445F1921F5DE2F55C0CF /* libavcodec.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		13D751FF90ECA865C13CA476 /* libswscale.9.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = D63F6ED5A2CFE36588F01FAF /* libswscale.9.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1D680C2E10767766AABD926A /* libopus.0.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 41B4E381F8521CCEA57FE685 /* libopus.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1DBDD2364D12D9F6E146DF0D /* libunibreak.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFD781501E2FBE18A84CAF2 /* libunibreak.7.dylib */; };
+		1ED4831CFB02218C7B6F1AF1 /* libSvtAv1Enc.4.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 857CE5FE7EEB737696406D5A /* libSvtAv1Enc.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1F16CEF095AAB22D30B52531 /* libssl.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72DE10445417B9BFD2EC0B2F /* libssl.3.dylib */; };
 		1FB241B3E58DC19813F3BF24 /* libcrypto.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA4F8AA43C21AA9042BAC2C /* libcrypto.3.dylib */; };
 		25AECAFD35F7115F2DC8234C /* VideoView_HDR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126006A8F0744AB99E5F16DC /* VideoView_HDR.swift */; };
+		2C6B7454D822997787EF12A6 /* libssl.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 72DE10445417B9BFD2EC0B2F /* libssl.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		2CF5C3EDCF23C27F5B78E204 /* libopus.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 41B4E381F8521CCEA57FE685 /* libopus.0.dylib */; };
 		3412DB8E2C2FC64C00BBC142 /* Equalizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3412DB8D2C2FC64800BBC142 /* Equalizations.swift */; };
 		348F71962DE2A819006C587D /* MPVCommandWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348F71952DE2A814006C587D /* MPVCommandWrappers.swift */; };
@@ -37,26 +42,6 @@
 		34ACABB62C142A0500F871A0 /* libass.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 34ACAB712C142A0500F871A0 /* libass.9.dylib */; };
 		34ACABB82C142A0C00F871A0 /* libass.9.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 34ACAB712C142A0500F871A0 /* libass.9.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34ACABC32C142A0C00F871A0 /* libdav1d.7.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 34ACAB402C142A0300F871A0 /* libdav1d.7.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		13C48EFFAA07A6E9C28B0E68 /* libavcodec.62.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 28D1445F1921F5DE2F55C0CF /* libavcodec.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		F241A61895D4A945A0C52A2E /* libavdevice.62.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 9255D7A84843701ECAD698D9 /* libavdevice.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		9ED12A98671DF901E532E0B1 /* libavfilter.11.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = B0B409E5FDEF1875C56AF73F /* libavfilter.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		621E3A2712DED6CFB5CBBA4E /* libavformat.62.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = E61D497C4D3C70818FB933B5 /* libavformat.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		C531C0513E30E77E84B9507F /* libavutil.60.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 86115AA37AD0E31B359E93F6 /* libavutil.60.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3A61ACEB0EE275146E6645C4 /* libbluray.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = F1BF4291725B5E7BB09ECCB1 /* libbluray.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		BD5800AE4961B133E41C9332 /* libcrypto.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = EAA4F8AA43C21AA9042BAC2C /* libcrypto.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		429559D3682397CD120F4157 /* libmp3lame.0.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 941096A45E743AAE78180840 /* libmp3lame.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		1D680C2E10767766AABD926A /* libopus.0.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 41B4E381F8521CCEA57FE685 /* libopus.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		C69722D1C9E2F3ACE5D69292 /* librubberband.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = D90523FF732A9254001F1A63 /* librubberband.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2C6B7454D822997787EF12A6 /* libssl.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 72DE10445417B9BFD2EC0B2F /* libssl.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		1ED4831CFB02218C7B6F1AF1 /* libSvtAv1Enc.4.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 857CE5FE7EEB737696406D5A /* libSvtAv1Enc.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6D5051D0F1D8D17B9538B062 /* libswresample.6.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 27E1F87489D87E244D4AC948 /* libswresample.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		13D751FF90ECA865C13CA476 /* libswscale.9.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = D63F6ED5A2CFE36588F01FAF /* libswscale.9.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		787894498A0E97AD8E680885 /* libudfread.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = A5378E9B0C7F41DB0EA1F5CC /* libudfread.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		96F8D0A88BA7931051D0B896 /* libunibreak.7.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = EEFD781501E2FBE18A84CAF2 /* libunibreak.7.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		7BB685F8268ACFB31D147927 /* libvmaf.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 7B449D67660E2338424616B2 /* libvmaf.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6EFA820C6361BDFFA557991B /* libvpx.12.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = ABF5FBF83D4D6CE60EF7E2E4 /* libvpx.12.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6338E6B61B69351B631EF49F /* libx264.165.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 38FD5903EBFFB50330712B95 /* libx264.165.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		DE6C1F2AF6BD0140A2D13524 /* libx265.216.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 6358810199CCCEFEAE03D80E /* libx265.216.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34ACABC42C142A0C00F871A0 /* libfontconfig.1.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 34ACAB452C142A0300F871A0 /* libfontconfig.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34ACABC52C142A0C00F871A0 /* libfreetype.6.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 34ACAB6D2C142A0500F871A0 /* libfreetype.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34ACABC62C142A0C00F871A0 /* libfribidi.0.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 34ACAB3B2C142A0300F871A0 /* libfribidi.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -77,7 +62,9 @@
 		34F294C02C0B68B300F14962 /* Contribution.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 34F294BF2C0B68B300F14962 /* Contribution.rtf */; };
 		34F8B6F62C6C7B0100AE4B16 /* PrefPluginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F8B6F52C6C7B0100AE4B16 /* PrefPluginViewController.xib */; };
 		34FD798E291C76A600963EDE /* LogWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD798D291C76A600963EDE /* LogWindowController.swift */; };
+		3A61ACEB0EE275146E6645C4 /* libbluray.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = F1BF4291725B5E7BB09ECCB1 /* libbluray.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3D7AFB18D3EDFFC66673BB08 /* libx265.216.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6358810199CCCEFEAE03D80E /* libx265.216.dylib */; };
+		429559D3682397CD120F4157 /* libmp3lame.0.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 941096A45E743AAE78180840 /* libmp3lame.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		49542975216C34950058F680 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49542974216C34950058F680 /* Cocoa.framework */; };
 		49542978216C34950058F680 /* SafariExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49542977216C34950058F680 /* SafariExtensionHandler.swift */; };
 		49542980216C34950058F680 /* open-in-iina.js in Resources */ = {isa = PBXBuildFile; fileRef = 4954297F216C34950058F680 /* open-in-iina.js */; };
@@ -106,8 +93,14 @@
 		51EDB4722E85EE10007E5018 /* DisplayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EDB4712E85EE10007E5018 /* DisplayController.swift */; };
 		51F7974728C7E00200812D0D /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F7974628C7E00200812D0D /* Lock.swift */; };
 		5F3830AD13B0DA5B54E5132A /* libavformat.62.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E61D497C4D3C70818FB933B5 /* libavformat.62.dylib */; };
+		621E3A2712DED6CFB5CBBA4E /* libavformat.62.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = E61D497C4D3C70818FB933B5 /* libavformat.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6338E6B61B69351B631EF49F /* libx264.165.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 38FD5903EBFFB50330712B95 /* libx264.165.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6D5051D0F1D8D17B9538B062 /* libswresample.6.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 27E1F87489D87E244D4AC948 /* libswresample.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6EFA820C6361BDFFA557991B /* libvpx.12.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = ABF5FBF83D4D6CE60EF7E2E4 /* libvpx.12.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		73EC68EEDDB28C399682C61A /* libavdevice.62.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9255D7A84843701ECAD698D9 /* libavdevice.62.dylib */; };
 		74C61B0AC72A5B491CE20E96 /* libavfilter.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B0B409E5FDEF1875C56AF73F /* libavfilter.11.dylib */; };
+		787894498A0E97AD8E680885 /* libudfread.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = A5378E9B0C7F41DB0EA1F5CC /* libudfread.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		7BB685F8268ACFB31D147927 /* libvmaf.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 7B449D67660E2338424616B2 /* libvmaf.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		81E65A08C6C1B432D726BD41 /* libmp3lame.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 941096A45E743AAE78180840 /* libmp3lame.0.dylib */; };
 		8400D5C41E17C6D2006785F5 /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400D5C21E17C6D2006785F5 /* AboutWindowController.swift */; };
 		8400D5C91E1AB2F9006785F5 /* QuickSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8400D5CB1E1AB2F9006785F5 /* QuickSettingViewController.xib */; };
@@ -230,15 +223,20 @@
 		84FBF23E1EF06A90003EA491 /* ThumbnailCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FBF23D1EF06A90003EA491 /* ThumbnailCache.swift */; };
 		8A09566F4AA45660E23B84F6 /* librubberband.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D90523FF732A9254001F1A63 /* librubberband.3.dylib */; };
 		8F49C36E213EFB7E0076C4F9 /* MiniPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F49C370213EFB7E0076C4F9 /* MiniPlayerViewController.xib */; };
+		96F8D0A88BA7931051D0B896 /* libunibreak.7.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = EEFD781501E2FBE18A84CAF2 /* libunibreak.7.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		978D036361F4204004C4001D /* libswresample.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E1F87489D87E244D4AC948 /* libswresample.6.dylib */; };
 		989B52EB7BF53E44AB0939F7 /* libavcodec.62.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D1445F1921F5DE2F55C0CF /* libavcodec.62.dylib */; };
 		9943D093379AC37232557D19 /* libswscale.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D63F6ED5A2CFE36588F01FAF /* libswscale.9.dylib */; };
 		9E47DAC01E3CFA6D00457420 /* DurationDisplayTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47DABF1E3CFA6D00457420 /* DurationDisplayTextField.swift */; };
+		9ED12A98671DF901E532E0B1 /* libavfilter.11.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = B0B409E5FDEF1875C56AF73F /* libavfilter.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AE7150246027CF2A3D088FD1 /* libudfread.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A5378E9B0C7F41DB0EA1F5CC /* libudfread.3.dylib */; };
 		B4E446E825CB53920069F06E /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = B4E446E725CB53920069F06E /* PromiseKit */; };
 		B4E446F725CB54EF0069F06E /* Mustache in Frameworks */ = {isa = PBXBuildFile; productRef = B4E446F625CB54EF0069F06E /* Mustache */; };
 		B4E4470125CE3F930069F06E /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B4E4470025CE3F930069F06E /* Sparkle */; };
 		B8CD94B327FD328F0EC3DC78 /* libx264.165.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FD5903EBFFB50330712B95 /* libx264.165.dylib */; };
+		BD5800AE4961B133E41C9332 /* libcrypto.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = EAA4F8AA43C21AA9042BAC2C /* libcrypto.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C531C0513E30E77E84B9507F /* libavutil.60.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 86115AA37AD0E31B359E93F6 /* libavutil.60.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C69722D1C9E2F3ACE5D69292 /* librubberband.3.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = D90523FF732A9254001F1A63 /* librubberband.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C789872F1E34EF170005769F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C78987311E34EF170005769F /* InfoPlist.strings */; };
 		CE74949AD2849653D1C77770 /* libvmaf.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B449D67660E2338424616B2 /* libvmaf.3.dylib */; };
 		D10046E02E4FFD0D009F17B1 /* BorderLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10046DF2E4FFD03009F17B1 /* BorderLineView.swift */; };
@@ -363,8 +361,10 @@
 		D1FF15772A7E35F300C0CE86 /* WindowAutosaveName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FF15762A7E35F300C0CE86 /* WindowAutosaveName.swift */; };
 		D1FF15792A7FA6A300C0CE86 /* PlayerSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FF15782A7FA6A300C0CE86 /* PlayerSaveState.swift */; };
 		D1FF157B2A7FAE9100C0CE86 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FF157A2A7FAE9100C0CE86 /* UIState.swift */; };
+		D3587D2AF4966A1E7D1B9401 /* SmartSubtitleMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8771FED13F3984F184526A1A /* SmartSubtitleMatcher.swift */; };
 		D62E81757949BC77B1FE950B /* libvpx.12.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABF5FBF83D4D6CE60EF7E2E4 /* libvpx.12.dylib */; };
 		DC03C34C8CC090C802AC393F /* libavutil.60.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86115AA37AD0E31B359E93F6 /* libavutil.60.dylib */; };
+		DE6C1F2AF6BD0140A2D13524 /* libx265.216.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 6358810199CCCEFEAE03D80E /* libx265.216.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E301EFDA21312AB300BC8588 /* KeychainAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E301EFD921312AB300BC8588 /* KeychainAccess.swift */; };
 		E30D2EBD21F5FD2600E1FF0D /* PluginOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30D2EBC21F5FD2600E1FF0D /* PluginOverlayView.swift */; };
 		E322A4F820A8442E00C67D32 /* PlaylistPlaybackProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E322A4F720A8442E00C67D32 /* PlaylistPlaybackProgressView.swift */; };
@@ -374,8 +374,6 @@
 		E32B157D21BC27B100CDBCEA /* JavascriptAPIMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32B157C21BC27B100CDBCEA /* JavascriptAPIMenu.swift */; };
 		E32B157F21BE219700CDBCEA /* JavascriptPluginMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32B157E21BE219700CDBCEA /* JavascriptPluginMenuItem.swift */; };
 		E33517542DFD25E100BBE169 /* SettingsLocalizationKeysUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33517532DFD25E100BBE169 /* SettingsLocalizationKeysUI.swift */; };
-		E3BBBBBB0000000000000016 /* SettingsLocalizationKeysVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000015 /* SettingsLocalizationKeysVideo.swift */; };
-		E3BBBBBB0000000000000018 /* SettingsLocalizationKeysAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000017 /* SettingsLocalizationKeysAudio.swift */; };
 		E3366AFA224A039500EF3C32 /* JavascriptAPIPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3366AF9224A039500EF3C32 /* JavascriptAPIPreferences.swift */; };
 		E337D5E22411B64A00B5729A /* JavascriptPolyfill.swift in Sources */ = {isa = PBXBuildFile; fileRef = E337D5E12411B64900B5729A /* JavascriptPolyfill.swift */; };
 		E337D5E4241C12BE00B5729A /* PrefPluginPermissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E337D5E3241C12BE00B5729A /* PrefPluginPermissionListView.swift */; };
@@ -422,8 +420,6 @@
 		E38099C92FC05B2E00D3333E /* SettingsPageSubtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38099BE2FC05B2E00D3333E /* SettingsPageSubtitles.swift */; };
 		E38099CA2FC05B2E00D3333E /* SettingsPageUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38099BF2FC05B2E00D3333E /* SettingsPageUI.swift */; };
 		E38099CB2FC05B2E00D3333E /* SettingsPageUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38099C02FC05B2E00D3333E /* SettingsPageUtilities.swift */; };
-		E3BBBBBB0000000000000002 /* SettingsPageVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000001 /* SettingsPageVideo.swift */; };
-		E3BBBBBB0000000000000004 /* SettingsPageAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000003 /* SettingsPageAudio.swift */; };
 		E38372922443634500F57718 /* LanguageTokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38372912443634500F57718 /* LanguageTokenField.swift */; };
 		E3839C5724FFF201007D0AB4 /* PluginStandaloneWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3839C5624FFF201007D0AB4 /* PluginStandaloneWindow.swift */; };
 		E3839C5924FFF817007D0AB4 /* JavascriptAPIStandaloneWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3839C5824FFF817007D0AB4 /* JavascriptAPIStandaloneWindow.swift */; };
@@ -458,6 +454,12 @@
 		E39EDD842CE2EB9600978036 /* PluginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39EDD812CE2EB9600978036 /* PluginViewController.swift */; };
 		E3B3DD5720FDB8A600325184 /* PreferenceWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3B3DD5920FDB8A600325184 /* PreferenceWindowController.xib */; };
 		E3BA79EE2131443A00529D99 /* OpenURLWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA79EC2131443A00529D99 /* OpenURLWindowController.swift */; };
+		E3BBBBBB0000000000000002 /* SettingsPageVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000001 /* SettingsPageVideo.swift */; };
+		E3BBBBBB0000000000000004 /* SettingsPageAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000003 /* SettingsPageAudio.swift */; };
+		E3BBBBBB0000000000000012 /* SettingsVideoLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000011 /* SettingsVideoLocalizable.strings */; };
+		E3BBBBBB0000000000000014 /* SettingsAudioLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000013 /* SettingsAudioLocalizable.strings */; };
+		E3BBBBBB0000000000000016 /* SettingsLocalizationKeysVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000015 /* SettingsLocalizationKeysVideo.swift */; };
+		E3BBBBBB0000000000000018 /* SettingsLocalizationKeysAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000017 /* SettingsLocalizationKeysAudio.swift */; };
 		E3C12F6B201F281F00297964 /* FirstRunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C12F6A201F281F00297964 /* FirstRunManager.swift */; };
 		E3CAD4AF2146DB47000B373A /* JavascriptAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CAD4AE2146DB47000B373A /* JavascriptAPI.swift */; };
 		E3CB258B2222885E00A62C47 /* JavascriptAPIOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CB258A2222885E00A62C47 /* JavascriptAPIOverlay.swift */; };
@@ -474,8 +476,6 @@
 		E3EC8C462F9475C600FBB51E /* PluginStorePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EC8C452F9475BC00FBB51E /* PluginStorePanel.swift */; };
 		E3EC8C482F95AD9600FBB51E /* SettingsGeneralLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3EC8C472F95AD9600FBB51E /* SettingsGeneralLocalizable.strings */; };
 		E3EC8C4A2F95AD9900FBB51E /* SettingsUILocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3EC8C492F95AD9900FBB51E /* SettingsUILocalizable.strings */; };
-		E3BBBBBB0000000000000012 /* SettingsVideoLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000011 /* SettingsVideoLocalizable.strings */; };
-		E3BBBBBB0000000000000014 /* SettingsAudioLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3BBBBBB0000000000000013 /* SettingsAudioLocalizable.strings */; };
 		E3EC8C4E2F95ADA000FBB51E /* SettingsSubtitesLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3EC8C4D2F95ADA000FBB51E /* SettingsSubtitesLocalizable.strings */; };
 		E3EC8C502F95B0A700FBB51E /* ConstraintsSugar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EC8C4F2F95B09D00FBB51E /* ConstraintsSugar.swift */; };
 		E3ECC89E1FE9A6D900BED8C7 /* MPVGeometryDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3ECC89D1FE9A6D900BED8C7 /* MPVGeometryDef.swift */; };
@@ -483,6 +483,7 @@
 		E3FEC1332A30400F00CFD845 /* PluginInputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FEC1322A30400F00CFD845 /* PluginInputManager.swift */; };
 		E3FF5AC02938582F0019CE45 /* JavascriptDevTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF5ABF2938582F0019CE45 /* JavascriptDevTool.swift */; };
 		EF90D308FE17CAE91FBD6AFD /* libSvtAv1Enc.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 857CE5FE7EEB737696406D5A /* libSvtAv1Enc.4.dylib */; };
+		F241A61895D4A945A0C52A2E /* libavdevice.62.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = 9255D7A84843701ECAD698D9 /* libavdevice.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1648,6 +1649,7 @@
 		875FDFA42157877000F7F7FD /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/MiniPlayerViewController.strings; sourceTree = "<group>"; };
 		875FDFA62157879900F7F7FD /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PreferenceWindowController.strings; sourceTree = "<group>"; };
 		875FDFA8215787A400F7F7FD /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/SubChooseViewController.strings; sourceTree = "<group>"; };
+		8771FED13F3984F184526A1A /* SmartSubtitleMatcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SmartSubtitleMatcher.swift; sourceTree = "<group>"; };
 		87E813251F83C05E00AA8D0C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/FilterPresets.strings; sourceTree = "<group>"; };
 		8F17B8FA2013956E0048FB5D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/FreeSelectingViewController.strings; sourceTree = "<group>"; };
 		8F49C361213EF4AF0076C4F9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SubChooseViewController.strings; sourceTree = "<group>"; };
@@ -1913,8 +1915,6 @@
 		E32B157C21BC27B100CDBCEA /* JavascriptAPIMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptAPIMenu.swift; sourceTree = "<group>"; };
 		E32B157E21BE219700CDBCEA /* JavascriptPluginMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptPluginMenuItem.swift; sourceTree = "<group>"; };
 		E33517532DFD25E100BBE169 /* SettingsLocalizationKeysUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalizationKeysUI.swift; sourceTree = "<group>"; };
-		E3BBBBBB0000000000000015 /* SettingsLocalizationKeysVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalizationKeysVideo.swift; sourceTree = "<group>"; };
-		E3BBBBBB0000000000000017 /* SettingsLocalizationKeysAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalizationKeysAudio.swift; sourceTree = "<group>"; };
 		E3366AF9224A039500EF3C32 /* JavascriptAPIPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptAPIPreferences.swift; sourceTree = "<group>"; };
 		E337D5E12411B64900B5729A /* JavascriptPolyfill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptPolyfill.swift; sourceTree = "<group>"; };
 		E337D5E3241C12BE00B5729A /* PrefPluginPermissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefPluginPermissionListView.swift; sourceTree = "<group>"; };
@@ -1989,8 +1989,6 @@
 		E38099BE2FC05B2E00D3333E /* SettingsPageSubtitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageSubtitles.swift; sourceTree = "<group>"; };
 		E38099BF2FC05B2E00D3333E /* SettingsPageUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageUI.swift; sourceTree = "<group>"; };
 		E38099C02FC05B2E00D3333E /* SettingsPageUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageUtilities.swift; sourceTree = "<group>"; };
-		E3BBBBBB0000000000000001 /* SettingsPageVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageVideo.swift; sourceTree = "<group>"; };
-		E3BBBBBB0000000000000003 /* SettingsPageAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageAudio.swift; sourceTree = "<group>"; };
 		E38372912443634500F57718 /* LanguageTokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTokenField.swift; sourceTree = "<group>"; };
 		E3839C5624FFF201007D0AB4 /* PluginStandaloneWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginStandaloneWindow.swift; sourceTree = "<group>"; };
 		E3839C5824FFF817007D0AB4 /* JavascriptAPIStandaloneWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptAPIStandaloneWindow.swift; sourceTree = "<group>"; };
@@ -2028,6 +2026,12 @@
 		E3B3DD5820FDB8A600325184 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferenceWindowController.xib; sourceTree = "<group>"; };
 		E3B3DD5B20FDB8A900325184 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PreferenceWindowController.strings"; sourceTree = "<group>"; };
 		E3BA79EC2131443A00529D99 /* OpenURLWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenURLWindowController.swift; sourceTree = "<group>"; };
+		E3BBBBBB0000000000000001 /* SettingsPageVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageVideo.swift; sourceTree = "<group>"; };
+		E3BBBBBB0000000000000003 /* SettingsPageAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageAudio.swift; sourceTree = "<group>"; };
+		E3BBBBBB0000000000000011 /* SettingsVideoLocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsVideoLocalizable.strings; sourceTree = "<group>"; };
+		E3BBBBBB0000000000000013 /* SettingsAudioLocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsAudioLocalizable.strings; sourceTree = "<group>"; };
+		E3BBBBBB0000000000000015 /* SettingsLocalizationKeysVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalizationKeysVideo.swift; sourceTree = "<group>"; };
+		E3BBBBBB0000000000000017 /* SettingsLocalizationKeysAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalizationKeysAudio.swift; sourceTree = "<group>"; };
 		E3C12F6A201F281F00297964 /* FirstRunManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstRunManager.swift; sourceTree = "<group>"; };
 		E3CAD4AE2146DB47000B373A /* JavascriptAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptAPI.swift; sourceTree = "<group>"; };
 		E3CB258A2222885E00A62C47 /* JavascriptAPIOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavascriptAPIOverlay.swift; sourceTree = "<group>"; };
@@ -2043,8 +2047,6 @@
 		E3EC8C452F9475BC00FBB51E /* PluginStorePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginStorePanel.swift; sourceTree = "<group>"; };
 		E3EC8C472F95AD9600FBB51E /* SettingsGeneralLocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsGeneralLocalizable.strings; sourceTree = "<group>"; };
 		E3EC8C492F95AD9900FBB51E /* SettingsUILocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsUILocalizable.strings; sourceTree = "<group>"; };
-		E3BBBBBB0000000000000011 /* SettingsVideoLocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsVideoLocalizable.strings; sourceTree = "<group>"; };
-		E3BBBBBB0000000000000013 /* SettingsAudioLocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsAudioLocalizable.strings; sourceTree = "<group>"; };
 		E3EC8C4D2F95ADA000FBB51E /* SettingsSubtitesLocalizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = SettingsSubtitesLocalizable.strings; sourceTree = "<group>"; };
 		E3EC8C4F2F95B09D00FBB51E /* ConstraintsSugar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintsSugar.swift; sourceTree = "<group>"; };
 		E3ECC89D1FE9A6D900BED8C7 /* MPVGeometryDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVGeometryDef.swift; sourceTree = "<group>"; };
@@ -2770,6 +2772,7 @@
 				D16B51092F5AA928000D9767 /* RAMDisk_README.md */,
 				126006A8F0744AB99E5F16DC /* VideoView_HDR.swift */,
 				9D3D4ADFC4F336DCFE6D5284 /* PerfManager.swift */,
+				8771FED13F3984F184526A1A /* SmartSubtitleMatcher.swift */,
 			);
 			indentWidth = 2;
 			path = iina;
@@ -3635,7 +3638,6 @@
 				D1C7410A2CB3833B00522FA7 /* ScrollableSlider.swift in Sources */,
 				D19AF88428A3CBCE009B598C /* InputConfFileCache.swift in Sources */,
 				D1A4C2DC2BF97BB200CE32A9 /* FileMonitor.swift in Sources */,
-				E38EA5902F2EE41600FB51CE /* SettingsPageNetwork.swift in Sources */,
 				84A0BAA11D2FAE7600BC8DA1 /* VideoView.swift in Sources */,
 				E395858A253314400096811F /* JavascriptAPISidebarView.swift in Sources */,
 				E3EC8C462F9475C600FBB51E /* PluginStorePanel.swift in Sources */,
@@ -3709,6 +3711,7 @@
 				D1A071892D644F4600884828 /* ResizableTextView.swift in Sources */,
 				25AECAFD35F7115F2DC8234C /* VideoView_HDR.swift in Sources */,
 				4EBE35D630B85DD77DF7688B /* PerfManager.swift in Sources */,
+				D3587D2AF4966A1E7D1B9401 /* SmartSubtitleMatcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

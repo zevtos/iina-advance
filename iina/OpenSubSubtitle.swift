@@ -23,7 +23,7 @@ class OpenSub {
       return dateFormatter
     }()
 
-    private let subtitle: OpenSubClient.Subtitle
+    fileprivate let subtitle: OpenSubClient.Subtitle
 
     init(index: Int, subtitle: OpenSubClient.Subtitle) {
       self.subtitle = subtitle
@@ -157,6 +157,13 @@ class OpenSub {
           }
         }.then { subs in
           self.showSubSelectWindow(with: subs)
+        }.get { [self] chosen in
+          // Smart download: once the user installs a subtitle for this episode, install the same
+          // release for every other episode of the series. Runs detached so it never blocks (or
+          // fails) the download of the subtitle the user actually selected.
+          if let representative = chosen.first {
+            startSmartDownload(currentURL: url, chosen: representative, player: player)
+          }
         }
     }
 
@@ -392,6 +399,154 @@ class OpenSub {
           PlayerManager.shared.activePlayer?.sendOSD(.foundSub(subs.count), autoHide: false, accessoryViewController: subChooseViewController)
           subChooseViewController.tableView.reloadData()
         }
+      }
+    }
+
+    // MARK: - Smart Download
+
+    /// After the user installs a subtitle for the current episode, automatically install the same
+    /// release for every other episode of the series found in the playlist or the current file's
+    /// folder, saving each next to its video file so IINA auto-loads it on playback.
+    ///
+    /// Each episode costs one search + one download against the Open Subtitles quota; processing is
+    /// sequential to respect the API rate limiter, idempotent (episodes that already have a subtitle
+    /// are skipped), and best-effort (a failure for one episode never aborts the rest).
+    func startSmartDownload(currentURL: URL, chosen: Subtitle, player: PlayerCore) {
+      guard currentURL.isFileURL else { return }
+      let chosenName = chosen.subtitle.attributes.files[0].fileName
+      let playlistURLs = player.info.playlist.map { $0.url }.filter { $0.isFileURL }
+      let siblings = Fetcher.gatherSiblings(of: currentURL, playlistURLs: playlistURLs)
+      guard !siblings.isEmpty else {
+        OpenSub.log("Smart download: no sibling episodes found for \(currentURL.lastPathComponent.pii.quoted)")
+        return
+      }
+      OpenSub.log("Smart download: \(siblings.count) sibling episode(s) to process")
+
+      var installed = 0
+      var chain: Promise<Void> = .value
+      for sib in siblings {
+        chain = chain.then { [self] _ -> Promise<Void> in
+          if Fetcher.adjacentSubtitleExists(for: sib) {
+            OpenSub.log("Smart download: \(sib.lastPathComponent.pii.quoted) already has a subtitle, skipping")
+            return .value
+          }
+          return installMatchingSubtitle(forSibling: sib, chosenName: chosenName)
+            .get { if $0 { installed += 1 } }
+            .asVoid()
+            .recover { error -> Promise<Void> in
+              OpenSub.log("Smart download failed for \(sib.lastPathComponent.pii.quoted): "
+                          + "\(error.localizedDescription)", level: .warning)
+              return .value
+            }
+        }
+      }
+      chain.done {
+        OpenSub.log("Smart download complete: installed \(installed) subtitle(s)")
+        guard installed > 0 else { return }
+        let count = installed
+        DispatchQueue.main.async {
+          player.sendOSD(.downloadedSub(
+            "Smart download: installed subtitles for \(count) more episode\(count == 1 ? "" : "s")"))
+        }
+      }.cauterize()
+    }
+
+    /// Search Open Subtitles for `sibling` (by hash + filename) and save the best matching release
+    /// next to it. Returns `true` if a subtitle was installed.
+    private func installMatchingSubtitle(forSibling sibling: URL, chosenName: String) -> Promise<Bool> {
+      return hash(sibling).recover { _ in Promise<String?>.value(nil) }.then { [self] hash -> Promise<Bool> in
+        let query = sibling.deletingPathExtension().lastPathComponent
+        return OpenSubClient.shared.subtitles(languages: languages, hash: hash, query: query)
+          .then { response -> Promise<Bool> in
+            let candidates = response.data.filter { $0.type == "subtitle" && !$0.attributes.files.isEmpty }
+            guard let best = Fetcher.bestCandidate(among: candidates, matching: chosenName) else {
+              OpenSub.log("Smart download: no usable subtitle for \(sibling.lastPathComponent.pii.quoted)")
+              return .value(false)
+            }
+            return self.downloadAndSave(best, nextTo: sibling)
+          }
+      }
+    }
+
+    /// Download the contents of `candidate` and write it next to `video` using the video's base name
+    /// (so IINA auto-loads it). Returns `true` on success.
+    private func downloadAndSave(_ candidate: OpenSubClient.Subtitle, nextTo video: URL) -> Promise<Bool> {
+      let file = candidate.attributes.files[0]
+      return OpenSubClient.shared.download(fileId: file.fileId).then { downloadResponse in
+        OpenSubClient.shared.downloadFileContents(downloadResponse.link).map { data -> Bool in
+          guard !data.isEmpty else { return false }
+          var ext = (file.fileName as NSString).pathExtension.lowercased()
+          if ext.isEmpty || !(Utility.supportedFileExt[.sub]?.contains(ext) ?? false) {
+            ext = "srt"
+          }
+          let base = video.deletingPathExtension().lastPathComponent
+          let target = video.deletingLastPathComponent().appendingPathComponent("\(base).\(ext)")
+          do {
+            try data.write(to: target)
+          } catch {
+            OpenSub.log("Smart download: cannot write \(target.lastPathComponent.pii.quoted): "
+                        + "\(error.localizedDescription)", level: .warning)
+            return false
+          }
+          OpenSub.log("Smart download: installed \(target.lastPathComponent.pii.quoted)")
+          return true
+        }
+      }
+    }
+
+    /// Collect file URLs that are the same series as `currentURL` but a different episode, gathered
+    /// from the playlist and the current file's directory, deduplicated and excluding the current
+    /// file itself.
+    static func gatherSiblings(of currentURL: URL, playlistURLs: [URL]) -> [URL] {
+      let currentName = currentURL.deletingPathExtension().lastPathComponent
+      let videoExts = Utility.supportedFileExt[.video] ?? []
+      var seen = Set<String>([currentURL.standardizedFileURL.path])
+      var result: [URL] = []
+
+      func consider(_ url: URL) {
+        let path = url.standardizedFileURL.path
+        guard !seen.contains(path),
+              videoExts.contains(url.pathExtension.lowercased()),
+              SmartSubtitleMatcher.isSameSeriesDifferentEpisode(
+                currentName, url.deletingPathExtension().lastPathComponent) else { return }
+        seen.insert(path)
+        result.append(url)
+      }
+
+      playlistURLs.forEach(consider)
+
+      let dir = currentURL.deletingLastPathComponent()
+      if let entries = try? FileManager.default.contentsOfDirectory(
+          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) {
+        entries.forEach(consider)
+      }
+      return result
+    }
+
+    /// `true` if a subtitle file with the same base name as `video` already sits next to it.
+    static func adjacentSubtitleExists(for video: URL) -> Bool {
+      let base = video.deletingPathExtension().lastPathComponent.lowercased()
+      let subExts = Utility.supportedFileExt[.sub] ?? []
+      let dir = video.deletingLastPathComponent()
+      guard let entries = try? FileManager.default.contentsOfDirectory(
+          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return false }
+      return entries.contains { url in
+        subExts.contains(url.pathExtension.lowercased())
+          && url.deletingPathExtension().lastPathComponent.lowercased() == base
+      }
+    }
+
+    /// Pick, among an episode's search results (already correct for that episode because the search
+    /// is keyed on the file's hash & name), the one whose release best matches the user's chosen
+    /// subtitle. Ties break toward the more popular subtitle.
+    static func bestCandidate(among candidates: [OpenSubClient.Subtitle],
+                              matching chosenName: String) -> OpenSubClient.Subtitle? {
+      guard !candidates.isEmpty else { return nil }
+      return candidates.max { a, b in
+        let sa = SmartSubtitleMatcher.releaseSimilarity(chosenName, a.attributes.files[0].fileName)
+        let sb = SmartSubtitleMatcher.releaseSimilarity(chosenName, b.attributes.files[0].fileName)
+        if sa != sb { return sa < sb }
+        return a.attributes.downloadCount < b.attributes.downloadCount
       }
     }
   }
