@@ -431,7 +431,16 @@ class OpenSub {
             return .value
           }
           return installMatchingSubtitle(forSibling: sib, chosenName: chosenName)
-            .get { if $0 { installed += 1 } }
+            .get { savedURL in
+              guard let savedURL else { return }
+              installed += 1
+              // IINA only scans the folder for matching subs once (when a single file is opened to
+              // build the playlist), with mpv's own `sub-auto` disabled. A sibling already in the
+              // playlist would therefore never see this just-written file. Register it directly so
+              // the existing external-sub load path picks it up — and auto-selects it — when that
+              // episode starts. Keyed by the same path `getMatchedSubs` reads (`PlaybackID.path`).
+              player.info.$matchedSubs.withLock { $0[sib.path, default: []].append(savedURL) }
+            }
             .asVoid()
             .recover { error -> Promise<Void> in
               OpenSub.log("Smart download failed for \(sib.lastPathComponent.pii.quoted): "
@@ -452,16 +461,16 @@ class OpenSub {
     }
 
     /// Search Open Subtitles for `sibling` (by hash + filename) and save the best matching release
-    /// next to it. Returns `true` if a subtitle was installed.
-    private func installMatchingSubtitle(forSibling sibling: URL, chosenName: String) -> Promise<Bool> {
-      return hash(sibling).recover { _ in Promise<String?>.value(nil) }.then { [self] hash -> Promise<Bool> in
+    /// next to it. Returns the saved subtitle URL, or `nil` if nothing was installed.
+    private func installMatchingSubtitle(forSibling sibling: URL, chosenName: String) -> Promise<URL?> {
+      return hash(sibling).recover { _ in Promise<String?>.value(nil) }.then { [self] hash -> Promise<URL?> in
         let query = sibling.deletingPathExtension().lastPathComponent
         return OpenSubClient.shared.subtitles(languages: languages, hash: hash, query: query)
-          .then { response -> Promise<Bool> in
+          .then { response -> Promise<URL?> in
             let candidates = response.data.filter { $0.type == "subtitle" && !$0.attributes.files.isEmpty }
             guard let best = Fetcher.bestCandidate(among: candidates, matching: chosenName) else {
               OpenSub.log("Smart download: no usable subtitle for \(sibling.lastPathComponent.pii.quoted)")
-              return .value(false)
+              return .value(nil)
             }
             return self.downloadAndSave(best, nextTo: sibling)
           }
@@ -469,12 +478,12 @@ class OpenSub {
     }
 
     /// Download the contents of `candidate` and write it next to `video` using the video's base name
-    /// (so IINA auto-loads it). Returns `true` on success.
-    private func downloadAndSave(_ candidate: OpenSubClient.Subtitle, nextTo video: URL) -> Promise<Bool> {
+    /// (so IINA matches it). Returns the saved file URL, or `nil` on failure.
+    private func downloadAndSave(_ candidate: OpenSubClient.Subtitle, nextTo video: URL) -> Promise<URL?> {
       let file = candidate.attributes.files[0]
       return OpenSubClient.shared.download(fileId: file.fileId).then { downloadResponse in
-        OpenSubClient.shared.downloadFileContents(downloadResponse.link).map { data -> Bool in
-          guard !data.isEmpty else { return false }
+        OpenSubClient.shared.downloadFileContents(downloadResponse.link).map { data -> URL? in
+          guard !data.isEmpty else { return nil }
           var ext = (file.fileName as NSString).pathExtension.lowercased()
           if ext.isEmpty || !(Utility.supportedFileExt[.sub]?.contains(ext) ?? false) {
             ext = "srt"
@@ -486,10 +495,10 @@ class OpenSub {
           } catch {
             OpenSub.log("Smart download: cannot write \(target.lastPathComponent.pii.quoted): "
                         + "\(error.localizedDescription)", level: .warning)
-            return false
+            return nil
           }
           OpenSub.log("Smart download: installed \(target.lastPathComponent.pii.quoted)")
-          return true
+          return target
         }
       }
     }
