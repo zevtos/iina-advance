@@ -434,12 +434,9 @@ class OpenSub {
             .get { savedURL in
               guard let savedURL else { return }
               installed += 1
-              // IINA only scans the folder for matching subs once (when a single file is opened to
-              // build the playlist), with mpv's own `sub-auto` disabled. A sibling already in the
-              // playlist would therefore never see this just-written file. Register it directly so
-              // the existing external-sub load path picks it up — and auto-selects it — when that
-              // episode starts. Keyed by the same path `getMatchedSubs` reads (`PlaybackID.path`).
-              player.info.$matchedSubs.withLock { $0[sib.path, default: []].append(savedURL) }
+              // Queue it for load+select when this episode starts (see PlaybackInfo.pendingSmartSubs
+              // / PlayerCore postload). Keyed by a resolved path, so it survives mpv-vs-URL quirks.
+              player.info.addPendingSmartSub(savedURL, forVideo: sib)
             }
             .asVoid()
             .recover { error -> Promise<Void> in

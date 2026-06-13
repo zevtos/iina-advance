@@ -380,6 +380,27 @@ class PlaybackInfo {
 
   func getMatchedSubs(_ file: String) -> [URL]? { $matchedSubs.withLock { $0[file] } }
 
+  /// Subtitles fetched by smart download for playlist siblings that are not yet playing. Keyed by a
+  /// resolved/standardized path so the lookup at file-load time is immune to mpv-vs-URL path quirks.
+  /// Drained (load + auto-select) when that file starts. See `OpenSub.Fetcher.startSmartDownload`.
+  @Atomic var pendingSmartSubs: [String: [URL]] = [:]
+
+  /// Normalized key for the pending-smart-subs map (resolves symlinks, standardizes).
+  static func smartSubKey(for url: URL) -> String {
+    url.resolvingSymlinksInPath().standardizedFileURL.path
+  }
+
+  func addPendingSmartSub(_ subURL: URL, forVideo videoURL: URL) {
+    let key = PlaybackInfo.smartSubKey(for: videoURL)
+    $pendingSmartSubs.withLock { $0[key, default: []].append(subURL) }
+  }
+
+  /// Atomically returns and removes any pending smart-downloaded subtitles for `videoURL`.
+  func takePendingSmartSubs(forVideo videoURL: URL) -> [URL] {
+    let key = PlaybackInfo.smartSubKey(for: videoURL)
+    return $pendingSmartSubs.withLock { $0.removeValue(forKey: key) ?? [] }
+  }
+
   /// * If `0`, corresoponds to mpv's `cursor-autohide=always`.
   /// * If `> 0`, corresoponds to mpv's `cursor-autohide={number}`.
   /// * If `< 0`, corresoponds to mpv's `cursor-autohide=never`.

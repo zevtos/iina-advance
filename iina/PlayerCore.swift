@@ -2571,6 +2571,19 @@ final class PlayerCore: NSObject {
       }
     }
 
+    // Load any subtitle that smart download fetched for this file while a previous episode was
+    // playing. IINA only scans the folder for matching subs once (single-file open) and disables
+    // mpv's sub-auto, so siblings already in the playlist never see the just-written file. `sub-add`
+    // selects the track by default, giving the same release/language chosen on the prior episode.
+    let pendingSmartSubs = info.takePendingSmartSubs(forVideo: currentPlayback.url)
+    if !pendingSmartSubs.isEmpty {
+      log.debug("Loading \(pendingSmartSubs.count) smart-downloaded sub(s) for current file")
+      for sub in pendingSmartSubs {
+        guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
+        loadExternalSubFile(sub)
+      }
+    }
+
     // Search for online subtitles, auto-load if found
     if Preference.bool(for: .autoSearchOnlineSub) &&
         !info.isNetworkResource &&
