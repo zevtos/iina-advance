@@ -185,6 +185,9 @@
 
 "menu.volume" = "Volume: %@";
 "menu.volume_muted" = "Volume: %@ (Muted)";
+"menu.auto_skip_opening" = "Auto Skip Opening";
+"menu.auto_skip_ending" = "Auto Skip Ending";
+"menu.auto_skip_credits" = "Auto Skip Credits";
 "menu.audio_delay" = "Audio Delay: %@s";
 "menu.sub_delay" = "Subtitle Delay: %@s";
 "menu.sub_hide" = "Hide Subtitles";

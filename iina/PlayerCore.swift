@@ -2331,12 +2331,52 @@ final class PlayerCore: NSObject {
     assert(DispatchQueue.isExecutingIn(mpv.queue))
     guard isActive else { return }
     let chapter = Int(mpv.getInt(MPVProperty.chapter))
+    if autoSkipChapterIfNeeded(chapter) { return }
     DispatchQueue.main.async { [self] in
       log.verbose("Δ mpv prop: 'chapter' = \(chapter)")
       info.chapter = chapter
     }
     syncUIChapterList()
     mediaTitleChanged()
+  }
+
+  /// If the chapter just entered is detected as an opening / ending / credits section and the
+  /// matching auto-skip toggle is on, seek past it. Runs on the mpv queue; reads chapter metadata
+  /// straight from mpv (its `info.chapters` mirror is `@MainActor`). Only ever seeks forward, so the
+  /// chained `chapterChanged` it triggers can't loop. Returns `true` if a skip was issued.
+  @discardableResult
+  private func autoSkipChapterIfNeeded(_ chapterIndex: Int) -> Bool {
+    assert(DispatchQueue.isExecutingIn(mpv.queue))
+    guard chapterIndex >= 0,
+          Preference.bool(for: .autoSkipOpening)
+            || Preference.bool(for: .autoSkipEnding)
+            || Preference.bool(for: .autoSkipCredits) else { return false }
+
+    let count = Int(mpv.getInt(MPVProperty.chapterListCount))
+    guard chapterIndex < count else { return false }
+
+    let duration = mpv.getDouble(MPVProperty.duration)
+    let startTime = mpv.getDouble(MPVProperty.chapterListNTime(chapterIndex))
+    let endTime = chapterIndex + 1 < count
+      ? mpv.getDouble(MPVProperty.chapterListNTime(chapterIndex + 1))
+      : duration
+    let info = ChapterSkip.ChapterInfo(title: mpv.getString(MPVProperty.chapterListNTitle(chapterIndex)),
+                                       index: chapterIndex, startTime: startTime, endTime: endTime,
+                                       chapterCount: count, duration: duration)
+
+    guard let match = ChapterSkip.classify(info), ChapterSkip.shouldSkip(match) else { return false }
+
+    if chapterIndex + 1 < count {
+      log.debug("Auto-skip \(match.kind) chapter \(chapterIndex) → next chapter at \(endTime)s")
+      mpv.command(.seek, args: ["\(endTime)", "absolute"], checkError: false)
+    } else if duration > 0 {
+      // Last chapter: seek to the end so the file finishes and the playlist advances naturally.
+      log.debug("Auto-skip \(match.kind) final chapter \(chapterIndex) → end of file")
+      mpv.command(.seek, args: ["\(duration)", "absolute"], checkError: false)
+    } else {
+      return false
+    }
+    return true
   }
 
   func idleActiveChanged() {

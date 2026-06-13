@@ -230,6 +230,7 @@
 		9E47DAC01E3CFA6D00457420 /* DurationDisplayTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47DABF1E3CFA6D00457420 /* DurationDisplayTextField.swift */; };
 		9ED12A98671DF901E532E0B1 /* libavfilter.11.dylib in Copy Dylibs */ = {isa = PBXBuildFile; fileRef = B0B409E5FDEF1875C56AF73F /* libavfilter.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AE7150246027CF2A3D088FD1 /* libudfread.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A5378E9B0C7F41DB0EA1F5CC /* libudfread.3.dylib */; };
+		AFB8BD2C258C9A4CA69CD2E2 /* ChapterSkip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89B7863350AAF9A3267433E /* ChapterSkip.swift */; };
 		B4E446E825CB53920069F06E /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = B4E446E725CB53920069F06E /* PromiseKit */; };
 		B4E446F725CB54EF0069F06E /* Mustache in Frameworks */ = {isa = PBXBuildFile; productRef = B4E446F625CB54EF0069F06E /* Mustache */; };
 		B4E4470125CE3F930069F06E /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B4E4470025CE3F930069F06E /* Sparkle */; };
@@ -1672,6 +1673,7 @@
 		9E47DABF1E3CFA6D00457420 /* DurationDisplayTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DurationDisplayTextField.swift; sourceTree = "<group>"; };
 		9E63CAB61E3F7D0E00EA66C9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		A5378E9B0C7F41DB0EA1F5CC /* libudfread.3.dylib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "compiled.mach-o.dylib"; name = libudfread.3.dylib; path = deps/lib/libudfread.3.dylib; sourceTree = "<group>"; };
+		A89B7863350AAF9A3267433E /* ChapterSkip.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ChapterSkip.swift; sourceTree = "<group>"; };
 		ABF5FBF83D4D6CE60EF7E2E4 /* libvpx.12.dylib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "compiled.mach-o.dylib"; name = libvpx.12.dylib; path = deps/lib/libvpx.12.dylib; sourceTree = "<group>"; };
 		B0B409E5FDEF1875C56AF73F /* libavfilter.11.dylib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "compiled.mach-o.dylib"; name = libavfilter.11.dylib; path = deps/lib/libavfilter.11.dylib; sourceTree = "<group>"; };
 		B305513A2190B0C600D3F70E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/MiniPlayerViewController.strings; sourceTree = "<group>"; };
@@ -2773,6 +2775,7 @@
 				126006A8F0744AB99E5F16DC /* VideoView_HDR.swift */,
 				9D3D4ADFC4F336DCFE6D5284 /* PerfManager.swift */,
 				8771FED13F3984F184526A1A /* SmartSubtitleMatcher.swift */,
+				A89B7863350AAF9A3267433E /* ChapterSkip.swift */,
 			);
 			indentWidth = 2;
 			path = iina;
@@ -3712,6 +3715,7 @@
 				25AECAFD35F7115F2DC8234C /* VideoView_HDR.swift in Sources */,
 				4EBE35D630B85DD77DF7688B /* PerfManager.swift in Sources */,
 				D3587D2AF4966A1E7D1B9401 /* SmartSubtitleMatcher.swift in Sources */,
+				AFB8BD2C258C9A4CA69CD2E2 /* ChapterSkip.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -433,6 +433,11 @@ struct Preference {
     static let ytdlRawOptions = Key("ytdlRawOptions")
     static let httpProxy = Key("httpProxy")
 
+    /// Auto-skip chapters detected as opening / ending / credits. See `ChapterSkip`.
+    static let autoSkipOpening = Key("autoSkipOpening")
+    static let autoSkipEnding = Key("autoSkipEnding")
+    static let autoSkipCredits = Key("autoSkipCredits")
+
     // MARK: - Keys: Control
 
     /** Seek option */
@@ -1863,6 +1868,9 @@ struct Preference {
     .ytdlSearchPath: "/usr/local/bin",
     .ytdlRawOptions: "",
     .httpProxy: "",
+    .autoSkipOpening: false,
+    .autoSkipEnding: false,
+    .autoSkipCredits: false,
 
       .currentInputConfigName: Constants.InputConf.defaultConfNamesSorted[0],
 

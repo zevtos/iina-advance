@@ -64,6 +64,10 @@ class MenuController: NSObject, NSMenuDelegate {
   @IBOutlet weak var previousChapter: NSMenuItem!
   @IBOutlet weak var chapter: NSMenuItem!
   @IBOutlet weak var chapterMenu: NSMenu!
+  // Auto-skip toggles (added programmatically, not from the XIB)
+  private var autoSkipOpening: NSMenuItem!
+  private var autoSkipEnding: NSMenuItem!
+  private var autoSkipCredits: NSMenuItem!
   // Video
   @IBOutlet weak var videoMenu: NSMenu!
   @IBOutlet weak var quickSettingsVideo: NSMenuItem!
@@ -222,6 +226,18 @@ class MenuController: NSObject, NSMenuDelegate {
 
     nextChapter.action = #selector(PlayerWindowController.menuNextChapter(_:))
     previousChapter.action = #selector(PlayerWindowController.menuPreviousChapter(_:))
+
+    // -- auto-skip toggles (opening / ending / credits)
+    playbackMenu.addItem(.separator())
+    autoSkipOpening = playbackMenu.addItem(
+      withTitle: NSLocalizedString("menu.auto_skip_opening", comment: "Auto Skip Opening"),
+      action: #selector(PlayerWindowController.menuToggleAutoSkipOpening(_:)), keyEquivalent: "")
+    autoSkipEnding = playbackMenu.addItem(
+      withTitle: NSLocalizedString("menu.auto_skip_ending", comment: "Auto Skip Ending"),
+      action: #selector(PlayerWindowController.menuToggleAutoSkipEnding(_:)), keyEquivalent: "")
+    autoSkipCredits = playbackMenu.addItem(
+      withTitle: NSLocalizedString("menu.auto_skip_credits", comment: "Auto Skip Credits"),
+      action: #selector(PlayerWindowController.menuToggleAutoSkipCredits(_:)), keyEquivalent: "")
 
     // Video menu
 
@@ -467,6 +483,9 @@ class MenuController: NSObject, NSMenuDelegate {
     abLoop.state = abLoopActive ? .on : .off
     fileLoop.state = loopMode == .file ? .on : .off
     playlistLoop.state = loopMode == .playlist ? .on : .off
+    autoSkipOpening.state = Preference.bool(for: .autoSkipOpening) ? .on : .off
+    autoSkipEnding.state = Preference.bool(for: .autoSkipEnding) ? .on : .off
+    autoSkipCredits.state = Preference.bool(for: .autoSkipCredits) ? .on : .off
   }
 
   @MainActor
