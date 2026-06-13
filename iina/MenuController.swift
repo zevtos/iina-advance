@@ -68,6 +68,7 @@ class MenuController: NSObject, NSMenuDelegate {
   private var autoSkipOpening: NSMenuItem!
   private var autoSkipEnding: NSMenuItem!
   private var autoSkipCredits: NSMenuItem!
+  private var smartDownloadSubtitles: NSMenuItem!
   // Video
   @IBOutlet weak var videoMenu: NSMenu!
   @IBOutlet weak var quickSettingsVideo: NSMenuItem!
@@ -350,6 +351,12 @@ class MenuController: NSObject, NSMenuDelegate {
     findOnlineSub.action = #selector(PlayerWindowController.menuFindOnlineSub(_:))
     saveDownloadedSub.action = #selector(PlayerWindowController.saveDownloadedSub(_:))
 
+    // Smart download toggle (added programmatically, not from the XIB)
+    smartDownloadSubtitles = subMenu.insertItem(
+      withTitle: NSLocalizedString("menu.smart_download_subtitles", comment: "Smart Download (whole series)"),
+      action: #selector(PlayerWindowController.menuToggleSmartDownloadSubtitles(_:)),
+      keyEquivalent: "", at: subMenu.index(of: saveDownloadedSub) + 1)
+
     onlineSubSourceMenu.delegate = self
 
     // - text size
@@ -568,6 +575,7 @@ class MenuController: NSObject, NSMenuDelegate {
     let providerID = Preference.string(for: .onlineSubProvider) ?? OnlineSubtitle.Providers.openSub.id
     let providerName = OnlineSubtitle.Providers.nameForID(providerID)
     findOnlineSub.title = String(format: StringConstants.findOnlineSubtitles, providerName)
+    smartDownloadSubtitles.state = Preference.bool(for: .smartDownloadSubtitles) ? .on : .off
   }
 
   private func updateOnlineSubSourceMenu() {

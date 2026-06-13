@@ -406,12 +406,14 @@ class OpenSub {
 
     /// After the user installs a subtitle for the current episode, automatically install the same
     /// release for every other episode of the series found in the playlist or the current file's
-    /// folder, saving each next to its video file so IINA auto-loads it on playback.
+    /// folder, saving each next to its video file (non-destructively) so it loads on that episode.
     ///
-    /// Each episode costs one search + one download against the Open Subtitles quota; processing is
-    /// sequential to respect the API rate limiter, idempotent (episodes that already have a subtitle
-    /// are skipped), and best-effort (a failure for one episode never aborts the rest).
+    /// Opt-in via `Preference.Key.smartDownloadSubtitles` (off by default — normal subtitle loading
+    /// is never altered when disabled). Each episode costs one search + one download against the Open
+    /// Subtitles quota; processing is sequential to respect the API rate limiter, never overwrites an
+    /// existing file, and is best-effort (a failure for one episode never aborts the rest).
     func startSmartDownload(currentURL: URL, chosen: Subtitle, player: PlayerCore) {
+      guard Preference.bool(for: .smartDownloadSubtitles) else { return }
       guard currentURL.isFileURL else { return }
       let chosenName = chosen.subtitle.attributes.files[0].fileName
       let playlistURLs = player.info.playlist.map { $0.url }.filter { $0.isFileURL }
@@ -471,26 +473,34 @@ class OpenSub {
               OpenSub.log("Smart download: no usable subtitle for \(sibling.lastPathComponent.pii.quoted)")
               return .value(nil)
             }
-            return self.downloadAndSave(best, nextTo: sibling)
+            // Non-destructive target: "<video base>.<lang>.<ext>". Never overwrites the user's own
+            // subtitles (a different name from "<video base>.<ext>"), still contains the video base
+            // name so IINA matches it, and is recognizable in the track menu.
+            let file = best.attributes.files[0]
+            var ext = (file.fileName as NSString).pathExtension.lowercased()
+            if ext.isEmpty || !(Utility.supportedFileExt[.sub]?.contains(ext) ?? false) { ext = "srt" }
+            let lang = best.attributes.language.lowercased()
+            let base = sibling.deletingPathExtension().lastPathComponent
+            let suffix = lang.isEmpty ? ".smart" : ".\(lang)"
+            let target = sibling.deletingLastPathComponent().appendingPathComponent("\(base)\(suffix).\(ext)")
+            if FileManager.default.fileExists(atPath: target.path) {
+              OpenSub.log("Smart download: \(target.lastPathComponent.pii.quoted) already present; will load it")
+              return .value(target)  // already have it — skip the download to save quota
+            }
+            return self.downloadAndSave(best, to: target)
           }
       }
     }
 
-    /// Download the contents of `candidate` and write it next to `video` using the video's base name
-    /// (so IINA matches it). Returns the saved file URL, or `nil` on failure.
-    private func downloadAndSave(_ candidate: OpenSubClient.Subtitle, nextTo video: URL) -> Promise<URL?> {
+    /// Download the contents of `candidate` and write it to `target` (which must not already exist).
+    /// Returns the saved file URL, or `nil` on failure.
+    private func downloadAndSave(_ candidate: OpenSubClient.Subtitle, to target: URL) -> Promise<URL?> {
       let file = candidate.attributes.files[0]
       return OpenSubClient.shared.download(fileId: file.fileId).then { downloadResponse in
         OpenSubClient.shared.downloadFileContents(downloadResponse.link).map { data -> URL? in
           guard !data.isEmpty else { return nil }
-          var ext = (file.fileName as NSString).pathExtension.lowercased()
-          if ext.isEmpty || !(Utility.supportedFileExt[.sub]?.contains(ext) ?? false) {
-            ext = "srt"
-          }
-          let base = video.deletingPathExtension().lastPathComponent
-          let target = video.deletingLastPathComponent().appendingPathComponent("\(base).\(ext)")
           do {
-            try data.write(to: target)
+            try data.write(to: target, options: .withoutOverwriting)
           } catch {
             OpenSub.log("Smart download: cannot write \(target.lastPathComponent.pii.quoted): "
                         + "\(error.localizedDescription)", level: .warning)

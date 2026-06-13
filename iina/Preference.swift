@@ -438,6 +438,11 @@ struct Preference {
     static let autoSkipEnding = Key("autoSkipEnding")
     static let autoSkipCredits = Key("autoSkipCredits")
 
+    /// When downloading a subtitle, also fetch the same release for every other episode of the
+    /// series. Opt-in: off by default so normal subtitle loading is never altered. See
+    /// `OpenSub.Fetcher.startSmartDownload`.
+    static let smartDownloadSubtitles = Key("smartDownloadSubtitles")
+
     // MARK: - Keys: Control
 
     /** Seek option */
@@ -1871,6 +1876,7 @@ struct Preference {
     .autoSkipOpening: false,
     .autoSkipEnding: false,
     .autoSkipCredits: false,
+    .smartDownloadSubtitles: false,
 
       .currentInputConfigName: Constants.InputConf.defaultConfNamesSorted[0],
 

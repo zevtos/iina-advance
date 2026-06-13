@@ -147,22 +147,26 @@ extension PlayerWindowController {
     player.togglePlaylistLoop()
   }
 
-  private func toggleAutoSkip(_ key: Preference.Key, _ sender: NSMenuItem) {
+  private func toggleBoolPreference(_ key: Preference.Key, _ sender: NSMenuItem) {
     let newValue = !Preference.bool(for: key)
     Preference.set(newValue, for: key)
     sender.state = newValue ? .on : .off
   }
 
   @objc func menuToggleAutoSkipOpening(_ sender: NSMenuItem) {
-    toggleAutoSkip(.autoSkipOpening, sender)
+    toggleBoolPreference(.autoSkipOpening, sender)
   }
 
   @objc func menuToggleAutoSkipEnding(_ sender: NSMenuItem) {
-    toggleAutoSkip(.autoSkipEnding, sender)
+    toggleBoolPreference(.autoSkipEnding, sender)
   }
 
   @objc func menuToggleAutoSkipCredits(_ sender: NSMenuItem) {
-    toggleAutoSkip(.autoSkipCredits, sender)
+    toggleBoolPreference(.autoSkipCredits, sender)
+  }
+
+  @objc func menuToggleSmartDownloadSubtitles(_ sender: NSMenuItem) {
+    toggleBoolPreference(.smartDownloadSubtitles, sender)
   }
 
   @objc func menuPlaylistItem(_ sender: NSMenuItem) {
