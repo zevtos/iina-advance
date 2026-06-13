@@ -2560,7 +2560,7 @@ final class PlayerCore: NSObject {
         guard !loadedSubs.contains(sub) else { continue }
         loadedSubs.insert(sub)
         guard currentTicket == postLoadBGQTicket else { return }
-        loadExternalSubFile(sub)
+        loadExternalSubFile(sub, silent: true)
       }
       if !isRestoring {
         // set sub to the first one
@@ -2580,7 +2580,7 @@ final class PlayerCore: NSObject {
     if let smartSub = info.smartSub(forVideo: currentPlayback.url) {
       guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
       log.debug("Loading smart-downloaded subtitle \(smartSub.lastPathComponent.pii.quoted) for current file")
-      loadExternalSubFile(smartSub)
+      loadExternalSubFile(smartSub, silent: true)
     }
 
     // Search for online subtitles, auto-load if found
@@ -2711,13 +2711,22 @@ final class PlayerCore: NSObject {
     }
   }
 
-  func loadExternalSubFile(_ url: URL, delay: Bool = false) {
+  /// - Parameter silent: when `true`, a failure to load (missing/unsupported file) is only logged —
+  ///   no modal. Used for automatic loads (matched external subs, smart download) so a stale or bad
+  ///   file can't pop a blocking "Unsupported external subtitle" dialog on every file start.
+  func loadExternalSubFile(_ url: URL, delay: Bool = false, silent: Bool = false) {
     mpv.queue.async { [self] in
       guard isActive else { return }
       log.verbose("Trying to load external sub file: \(url.path.pii.quoted)")
       if let track = info.findExternalSubTrack(withURL: url) {
         log.verbose("External sub file already loaded (track \(track.id))")
         mpv.command(.subReload, args: [String(track.id)], checkError: false)
+        return
+      }
+
+      // Skip a file that no longer exists (e.g. a stale match) without bothering mpv or the user.
+      if url.isFileURL, !FileManager.default.fileExists(atPath: url.path) {
+        log.warn("Skipping external sub; file not found: \(url.path.pii.quoted)")
         return
       }
 
@@ -2731,6 +2740,7 @@ final class PlayerCore: NSObject {
         if code >= 0 { return }
         let errorDesc = mpv.errorString(code)
         log.error("Failed to load sub (error \(code): \(errorDesc)) \(urlPath.pii.quoted)")
+        guard !silent else { return }
         // if another modal panel is shown, popping up an alert now will cause some infinite loop.
         if delay {
           DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
