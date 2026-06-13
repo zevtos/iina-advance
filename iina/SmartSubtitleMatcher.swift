@@ -81,6 +81,18 @@ enum SmartSubtitleMatcher {
     return tokens
   }
 
+  /// `true` if `name` references `episode` in an episode context — `E04`/`E4`, `EP04`, `1x04`, or a
+  /// dash form like `- 04`. Deliberately does NOT match a bare season (`S04`) or resolution (`x264`,
+  /// `1080`), so it won't confuse the season number with the episode number.
+  static func containsEpisodeNumber(_ name: String, _ episode: Int) -> Bool {
+    let pattern = "(?:e|ep|x|[-–])\\s?0*\(episode)(?!\\d)"
+    guard let re = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else {
+      return false
+    }
+    let range = NSRange(name.startIndex..., in: name)
+    return re.firstMatch(in: name, options: [], range: range) != nil
+  }
+
   /// Similarity in `[0, 1]` between two subtitle/release filenames, ignoring episode/season numbers.
   /// Used to pick, among an episode's search results, the one matching the user's chosen release.
   static func releaseSimilarity(_ a: String, _ b: String) -> Double {

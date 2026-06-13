@@ -793,6 +793,9 @@ class OpenSubClient {
 #endif
       var hearingImpaired: Bool?
       var language: String
+      /// `true` when this subtitle was matched by the movie file's hash — i.e. it is for *this exact
+      /// file*, not merely the same series. Used by smart download to install only correct subs.
+      var moviehashMatch: Bool?
 #if DEBUG
       var legacySubtitleId: Int?
       var machineTranslated: Bool?

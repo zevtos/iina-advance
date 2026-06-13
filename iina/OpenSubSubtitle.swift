@@ -435,7 +435,10 @@ class OpenSub {
             OpenSub.log("Smart download: \(sib.lastPathComponent.pii.quoted) already done, skipping")
             return .value
           }
-          return installMatchingSubtitle(forSibling: sib, chosenName: chosenName)
+          let currentName = currentURL.deletingPathExtension().lastPathComponent
+          let sibName = sib.deletingPathExtension().lastPathComponent
+          let episode = SmartSubtitleMatcher.episodeDifference(currentName, sibName)?.1
+          return installMatchingSubtitle(forSibling: sib, chosenName: chosenName, episode: episode)
             .get { savedURL in
               guard let savedURL else { return }
               installed += 1
@@ -463,14 +466,32 @@ class OpenSub {
 
     /// Search Open Subtitles for `sibling` (by hash + filename) and save the best matching release
     /// next to it. Returns the saved subtitle URL, or `nil` if nothing was installed.
-    private func installMatchingSubtitle(forSibling sibling: URL, chosenName: String) -> Promise<URL?> {
+    /// - Parameter episode: the sibling's episode number, used to verify a non-hash-matched result
+    ///   is actually for this episode (the series-wide query otherwise returns the same sub for all).
+    private func installMatchingSubtitle(forSibling sibling: URL, chosenName: String,
+                                         episode: Int?) -> Promise<URL?> {
       return hash(sibling).recover { _ in Promise<String?>.value(nil) }.then { [self] hash -> Promise<URL?> in
         let query = sibling.deletingPathExtension().lastPathComponent
         return OpenSubClient.shared.subtitles(languages: languages, hash: hash, query: query)
           .then { response -> Promise<URL?> in
-            let candidates = response.data.filter { $0.type == "subtitle" && !$0.attributes.files.isEmpty }
+            let valid = response.data.filter { $0.type == "subtitle" && !$0.attributes.files.isEmpty }
+            // Prefer subtitles confirmed for *this exact file* by movie hash. Otherwise the query
+            // matches the whole series and every episode would get the same (wrong) sub. When no
+            // hash match exists, fall back only to results whose filename references this episode.
+            let hashMatched = valid.filter { $0.attributes.moviehashMatch ?? false }
+            let candidates: [OpenSubClient.Subtitle]
+            if !hashMatched.isEmpty {
+              candidates = hashMatched
+            } else if let episode {
+              candidates = valid.filter {
+                SmartSubtitleMatcher.containsEpisodeNumber($0.attributes.files[0].fileName, episode)
+              }
+            } else {
+              candidates = []
+            }
             guard let best = Fetcher.bestCandidate(among: candidates, matching: chosenName) else {
-              OpenSub.log("Smart download: no usable subtitle for \(sibling.lastPathComponent.pii.quoted)")
+              OpenSub.log("Smart download: no subtitle confirmed for this episode "
+                          + "(\(sibling.lastPathComponent.pii.quoted)); skipping")
               return .value(nil)
             }
             // Non-destructive target: "<video base>.<lang>.<ext>". Never overwrites the user's own
