@@ -2571,30 +2571,16 @@ final class PlayerCore: NSObject {
       }
     }
 
-    // Load adjacent subtitles whose base name matches the video (e.g. ones smart download wrote for
-    // this episode while a previous one was playing). IINA only scans the folder for matching subs
-    // once — when a single file is opened to build the playlist — and disables mpv's sub-auto, so a
-    // sibling already in the playlist never sees a file written afterwards. Re-checking the disk here
-    // makes those load reliably regardless of when they appeared. `loadExternalSubFile` dedups
-    // against already-loaded tracks, and `sub-add` selects by default — so the episode opens with the
-    // same release/language picked on the prior one.
-    let videoURL = currentPlayback.url
-    if videoURL.isFileURL {
-      let base = videoURL.deletingPathExtension().lastPathComponent.lowercased()
-      let dir = videoURL.deletingLastPathComponent()
-      let subExts = Set(Utility.supportedFileExt[.sub] ?? [])
-      if let entries = try? FileManager.default.contentsOfDirectory(
-          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) {
-        let adjacent = entries.filter {
-          subExts.contains($0.pathExtension.lowercased())
-            && $0.deletingPathExtension().lastPathComponent.lowercased() == base
-        }
-        for sub in adjacent {
-          guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
-          log.debug("Loading adjacent subtitle \(sub.lastPathComponent.pii.quoted) for current file")
-          loadExternalSubFile(sub)
-        }
-      }
+    // If smart download fetched a subtitle for this episode while a previous one was playing, load
+    // and select exactly that one. IINA scans the folder for matching subs only once (single-file
+    // open) with mpv's sub-auto disabled, so a sibling already in the playlist never sees the
+    // just-written file. We deliberately load *only our* sub here — not any same-named file in the
+    // folder — so unrelated subtitles aren't force-selected. `loadExternalSubFile` dedups, and
+    // `sub-add` selects by default, giving the same release/language picked on the prior episode.
+    if let smartSub = info.smartSub(forVideo: currentPlayback.url) {
+      guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
+      log.debug("Loading smart-downloaded subtitle \(smartSub.lastPathComponent.pii.quoted) for current file")
+      loadExternalSubFile(smartSub)
     }
 
     // Search for online subtitles, auto-load if found

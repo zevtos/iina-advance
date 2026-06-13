@@ -426,15 +426,19 @@ class OpenSub {
       var chain: Promise<Void> = .value
       for sib in siblings {
         chain = chain.then { [self] _ -> Promise<Void> in
-          if Fetcher.adjacentSubtitleExists(for: sib) {
-            OpenSub.log("Smart download: \(sib.lastPathComponent.pii.quoted) already has a subtitle, skipping")
+          // Skip only siblings we already fetched this run — NOT ones that merely have some other
+          // subtitle in the folder. The user explicitly chose a release; install it for the series
+          // even where a different sub already exists (the saved file overwrites by base name).
+          if player.info.smartSub(forVideo: sib) != nil {
+            OpenSub.log("Smart download: \(sib.lastPathComponent.pii.quoted) already done, skipping")
             return .value
           }
           return installMatchingSubtitle(forSibling: sib, chosenName: chosenName)
             .get { savedURL in
-              // The file is written next to the video with its base name; PlayerCore loads adjacent
-              // same-name subs on every file start, so no further wiring is needed here.
-              if savedURL != nil { installed += 1 }
+              guard let savedURL else { return }
+              installed += 1
+              // Register so PlayerCore loads & selects exactly this sub when the episode plays.
+              player.info.setSmartSub(savedURL, forVideo: sib)
             }
             .asVoid()
             .recover { error -> Promise<Void> in
@@ -525,19 +529,6 @@ class OpenSub {
         entries.forEach(consider)
       }
       return result
-    }
-
-    /// `true` if a subtitle file with the same base name as `video` already sits next to it.
-    static func adjacentSubtitleExists(for video: URL) -> Bool {
-      let base = video.deletingPathExtension().lastPathComponent.lowercased()
-      let subExts = Utility.supportedFileExt[.sub] ?? []
-      let dir = video.deletingLastPathComponent()
-      guard let entries = try? FileManager.default.contentsOfDirectory(
-          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return false }
-      return entries.contains { url in
-        subExts.contains(url.pathExtension.lowercased())
-          && url.deletingPathExtension().lastPathComponent.lowercased() == base
-      }
     }
 
     /// Pick, among an episode's search results (already correct for that episode because the search
