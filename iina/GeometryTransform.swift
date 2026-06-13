@@ -869,8 +869,10 @@ extension PlayerWindowController {
       if validateLayoutFields(from: ctx.outputLayout, matchLayoutFromPrefs: prefsLayout) {
         log.verbose("[GTF:\(ctx.name)] Saved layout is consistent with IINA global prefs")
       } else {
-        // Not consistent. But we already have the correct spec, so just build a layout from it and transition to correct layout
-        log.errorDebugAlert("Player's saved layout does not match IINA app prefs! Will attempt to fix & apply a corrected layout")
+        // Not consistent. But we already have the correct spec, so just build a layout from it and transition to correct layout.
+        // This is benign self-healing (the repair transition below fixes it), so log it instead of
+        // popping a critical modal on every restore in Debug builds.
+        log.error("Player's saved layout does not match IINA app prefs! Will attempt to fix & apply a corrected layout")
         log.debug("[GTF:\(ctx.name)] SavedLayout=\(currentLayout). LayoutFromPrefs=\(prefsLayout)")
         let repairTransition = buildLayoutTransition(named: "FixInvalidInitialLayout",
                                                      from: initialTransition.outputLayout, to: prefsLayout)
