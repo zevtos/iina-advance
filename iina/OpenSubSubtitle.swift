@@ -432,11 +432,9 @@ class OpenSub {
           }
           return installMatchingSubtitle(forSibling: sib, chosenName: chosenName)
             .get { savedURL in
-              guard let savedURL else { return }
-              installed += 1
-              // Queue it for load+select when this episode starts (see PlaybackInfo.pendingSmartSubs
-              // / PlayerCore postload). Keyed by a resolved path, so it survives mpv-vs-URL quirks.
-              player.info.addPendingSmartSub(savedURL, forVideo: sib)
+              // The file is written next to the video with its base name; PlayerCore loads adjacent
+              // same-name subs on every file start, so no further wiring is needed here.
+              if savedURL != nil { installed += 1 }
             }
             .asVoid()
             .recover { error -> Promise<Void> in

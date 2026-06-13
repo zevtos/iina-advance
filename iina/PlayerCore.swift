@@ -2571,16 +2571,29 @@ final class PlayerCore: NSObject {
       }
     }
 
-    // Load any subtitle that smart download fetched for this file while a previous episode was
-    // playing. IINA only scans the folder for matching subs once (single-file open) and disables
-    // mpv's sub-auto, so siblings already in the playlist never see the just-written file. `sub-add`
-    // selects the track by default, giving the same release/language chosen on the prior episode.
-    let pendingSmartSubs = info.takePendingSmartSubs(forVideo: currentPlayback.url)
-    if !pendingSmartSubs.isEmpty {
-      log.debug("Loading \(pendingSmartSubs.count) smart-downloaded sub(s) for current file")
-      for sub in pendingSmartSubs {
-        guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
-        loadExternalSubFile(sub)
+    // Load adjacent subtitles whose base name matches the video (e.g. ones smart download wrote for
+    // this episode while a previous one was playing). IINA only scans the folder for matching subs
+    // once — when a single file is opened to build the playlist — and disables mpv's sub-auto, so a
+    // sibling already in the playlist never sees a file written afterwards. Re-checking the disk here
+    // makes those load reliably regardless of when they appeared. `loadExternalSubFile` dedups
+    // against already-loaded tracks, and `sub-add` selects by default — so the episode opens with the
+    // same release/language picked on the prior one.
+    let videoURL = currentPlayback.url
+    if videoURL.isFileURL {
+      let base = videoURL.deletingPathExtension().lastPathComponent.lowercased()
+      let dir = videoURL.deletingLastPathComponent()
+      let subExts = Set(Utility.supportedFileExt[.sub] ?? [])
+      if let entries = try? FileManager.default.contentsOfDirectory(
+          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) {
+        let adjacent = entries.filter {
+          subExts.contains($0.pathExtension.lowercased())
+            && $0.deletingPathExtension().lastPathComponent.lowercased() == base
+        }
+        for sub in adjacent {
+          guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
+          log.debug("Loading adjacent subtitle \(sub.lastPathComponent.pii.quoted) for current file")
+          loadExternalSubFile(sub)
+        }
       }
     }
 
