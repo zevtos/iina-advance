@@ -820,9 +820,16 @@ extension MPVController {
 
     if code < 0 {
       let message = errorString(code)
-      /// We may be on the main DQ already. Must async out of it to avoid deadlocking!
-      DispatchQueue.main.async {
-        Utility.showAlert("mpv_error", arguments: [message, "\(code)", name], disableMenus: true)
+      // An option the running mpv build simply does not have (e.g. `ytdl`/`ytdl-raw-options`
+      // are absent when libmpv was built without the ytdl_hook script). This is a build/version
+      // mismatch, not a user-actionable error, so log it instead of popping a modal on every launch.
+      if code == MPV_ERROR_OPTION_NOT_FOUND.rawValue {
+        log.warn("Skipping unsupported mpv option \(name.quoted): \(message) (\(code))")
+      } else {
+        /// We may be on the main DQ already. Must async out of it to avoid deadlocking!
+        DispatchQueue.main.async {
+          Utility.showAlert("mpv_error", arguments: [message, "\(code)", name], disableMenus: true)
+        }
       }
     }
 
