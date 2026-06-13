@@ -2571,16 +2571,41 @@ final class PlayerCore: NSObject {
       }
     }
 
-    // If smart download fetched a subtitle for this episode while a previous one was playing, load
-    // and select exactly that one. IINA scans the folder for matching subs only once (single-file
-    // open) with mpv's sub-auto disabled, so a sibling already in the playlist never sees the
-    // just-written file. We deliberately load *only our* sub here — not any same-named file in the
-    // folder — so unrelated subtitles aren't force-selected. `loadExternalSubFile` dedups, and
-    // `sub-add` selects by default, giving the same release/language picked on the prior episode.
-    if let smartSub = info.smartSub(forVideo: currentPlayback.url) {
-      guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
-      log.debug("Loading smart-downloaded subtitle \(smartSub.lastPathComponent.pii.quoted) for current file")
-      loadExternalSubFile(smartSub, silent: true)
+    // Load and select a language-suffixed sidecar subtitle ("<video base>.<lang>.<ext>") if present.
+    // This is the convention smart download writes (and a common manual one). IINA scans a folder for
+    // matching subs only once — at single-file open, with mpv's sub-auto disabled — so a sidecar
+    // written afterwards, or one whose episode is already in the playlist, is otherwise never loaded.
+    // Checking the disk here makes a downloaded subtitle appear and stay selected across episodes,
+    // even across app restarts. Loads silently (a bad file can't pop a modal), and `sub-add` selects
+    // it — preferring the user's configured language order.
+    let videoURL = currentPlayback.url
+    if videoURL.isFileURL {
+      let base = videoURL.deletingPathExtension().lastPathComponent.lowercased()
+      let dir = videoURL.deletingLastPathComponent()
+      let subExts = Set(Utility.supportedFileExt[.sub] ?? [])
+      let prefLangs = (Preference.string(for: .subLang) ?? "en")
+        .components(separatedBy: ",")
+        .map { $0.trimmingCharacters(in: .whitespaces).lowercased() }
+        .filter { !$0.isEmpty }
+      if let entries = try? FileManager.default.contentsOfDirectory(
+          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) {
+        var sidecars: [(lang: String, url: URL)] = []
+        for url in entries {
+          guard subExts.contains(url.pathExtension.lowercased()) else { continue }
+          let stem = url.deletingPathExtension().lastPathComponent.lowercased()  // "<base>.<lang>"
+          guard stem.hasPrefix(base + ".") else { continue }
+          let lang = String(stem.dropFirst(base.count + 1))
+          guard (2...5).contains(lang.count), !lang.contains(".") else { continue }
+          sidecars.append((lang, url))
+        }
+        let chosen = prefLangs.lazy.compactMap { lang in sidecars.first { $0.lang == lang } }.first
+          ?? sidecars.first
+        if let chosen {
+          guard currentTicket == postLoadBGQTicket, mpv.mpv != nil else { return }
+          log.debug("Loading language sidecar subtitle \(chosen.url.lastPathComponent.pii.quoted)")
+          loadExternalSubFile(chosen.url, silent: true)
+        }
+      }
     }
 
     // Search for online subtitles, auto-load if found

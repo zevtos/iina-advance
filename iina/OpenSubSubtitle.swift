@@ -428,11 +428,10 @@ class OpenSub {
       var chain: Promise<Void> = .value
       for sib in siblings {
         chain = chain.then { [self] _ -> Promise<Void> in
-          // Skip only siblings we already fetched this run — NOT ones that merely have some other
-          // subtitle in the folder. The user explicitly chose a release; install it for the series
-          // even where a different sub already exists (the saved file overwrites by base name).
-          if player.info.smartSub(forVideo: sib) != nil {
-            OpenSub.log("Smart download: \(sib.lastPathComponent.pii.quoted) already done, skipping")
+          // Skip a sibling that already has a language sidecar we'd write (avoids re-searching). The
+          // saved file is "<video base>.<lang>.<ext>"; PlayerCore loads & selects it on that episode.
+          if Fetcher.languageSidecarExists(for: sib) {
+            OpenSub.log("Smart download: \(sib.lastPathComponent.pii.quoted) already has a sidecar, skipping")
             return .value
           }
           let currentName = currentURL.deletingPathExtension().lastPathComponent
@@ -440,10 +439,7 @@ class OpenSub {
           let episode = SmartSubtitleMatcher.episodeDifference(currentName, sibName)?.1
           return installMatchingSubtitle(forSibling: sib, chosenName: chosenName, episode: episode)
             .get { savedURL in
-              guard let savedURL else { return }
-              installed += 1
-              // Register so PlayerCore loads & selects exactly this sub when the episode plays.
-              player.info.setSmartSub(savedURL, forVideo: sib)
+              if savedURL != nil { installed += 1 }
             }
             .asVoid()
             .recover { error -> Promise<Void> in
@@ -560,6 +556,23 @@ class OpenSub {
         entries.forEach(consider)
       }
       return result
+    }
+
+    /// `true` if a language-suffixed sidecar ("<video base>.<lang>.<subext>") already sits next to
+    /// `video` — i.e. smart download already produced a subtitle for it.
+    static func languageSidecarExists(for video: URL) -> Bool {
+      let base = video.deletingPathExtension().lastPathComponent.lowercased()
+      let subExts = Utility.supportedFileExt[.sub] ?? []
+      let dir = video.deletingLastPathComponent()
+      guard let entries = try? FileManager.default.contentsOfDirectory(
+          at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return false }
+      return entries.contains { url in
+        guard subExts.contains(url.pathExtension.lowercased()) else { return false }
+        let stem = url.deletingPathExtension().lastPathComponent.lowercased()  // "<base>.<lang>"
+        guard stem.hasPrefix(base + ".") else { return false }
+        let lang = String(stem.dropFirst(base.count + 1))
+        return (2...5).contains(lang.count) && !lang.contains(".")
+      }
     }
 
     /// Pick, among an episode's search results (already correct for that episode because the search

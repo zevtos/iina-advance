@@ -380,25 +380,6 @@ class PlaybackInfo {
 
   func getMatchedSubs(_ file: String) -> [URL]? { $matchedSubs.withLock { $0[file] } }
 
-  /// Subtitles that smart download fetched for series siblings, keyed by a resolved/standardized
-  /// video path. Used to auto-load and select *exactly our* sub on the matching episode — never the
-  /// unrelated subtitles that may also sit in the folder. See `OpenSub.Fetcher.startSmartDownload`.
-  @Atomic var smartSubs: [String: URL] = [:]
-
-  private static func smartSubKey(for url: URL) -> String {
-    url.resolvingSymlinksInPath().standardizedFileURL.path
-  }
-
-  func setSmartSub(_ subURL: URL, forVideo videoURL: URL) {
-    let key = PlaybackInfo.smartSubKey(for: videoURL)
-    $smartSubs.withLock { $0[key] = subURL }
-  }
-
-  func smartSub(forVideo videoURL: URL) -> URL? {
-    let key = PlaybackInfo.smartSubKey(for: videoURL)
-    return $smartSubs.withLock { $0[key] }
-  }
-
   /// * If `0`, corresoponds to mpv's `cursor-autohide=always`.
   /// * If `> 0`, corresoponds to mpv's `cursor-autohide={number}`.
   /// * If `< 0`, corresoponds to mpv's `cursor-autohide=never`.
